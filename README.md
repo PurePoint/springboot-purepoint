@@ -1,1 +1,1 @@
-# sprinboot-purepoint
+# springboot-purepoint
