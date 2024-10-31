@@ -90,10 +90,10 @@ CREATE TABLE Folder
 CREATE TABLE FolderVideo
 (
     folder_id CHAR(36), # 폴더 ID
-    재생목록_id VARCHAR(20), # 비디오 ID
-    PRIMARY KEY (folder_id, 재생목록_id),
+    playlist_id VARCHAR(20), # 비디오 ID
+    PRIMARY KEY (folder_id, playlist_id),
     FOREIGN KEY (folder_id) REFERENCES Folder (folder_id) ON DELETE CASCADE,
-    FOREIGN KEY (재생목록_id) REFERENCES 재생목록 (재생목록_id) ON DELETE CASCADE
+    FOREIGN KEY (playlist_id) REFERENCES PlayList (playlist_id) ON DELETE CASCADE
 );
 
 
