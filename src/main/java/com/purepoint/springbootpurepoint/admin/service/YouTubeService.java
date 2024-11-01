@@ -1,4 +1,4 @@
-package com.purepoint.springbootpurepoint.service;
+package com.purepoint.springbootpurepoint.admin.service;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;

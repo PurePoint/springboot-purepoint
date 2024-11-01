@@ -24,27 +24,32 @@ repositories {
 }
 
 dependencies {
-    // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // SpringBoot
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Lombok
+    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+
+    // MariaDB
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // google api, youtube v3
     implementation 'com.google.api-client:google-api-client:1.25.0'
     implementation 'com.google.apis:google-api-services-youtube:v3-rev222-1.25.0'
 
-    // gson
-    implementation 'com.google.code.gson:gson:2.8.8'
-
     // jackson
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.0'
-    }
+
+}
 
 tasks.named('test') {
     useJUnitPlatform()
