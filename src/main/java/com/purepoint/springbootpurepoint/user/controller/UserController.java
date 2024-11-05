@@ -27,11 +27,12 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "성공적으로 사용자 조회"),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")})
     @GetMapping("/{id}")
-    public UserDto getUserById(
+    public ResponseEntity<UserDto> getUserById(
             @Parameter(description = "사용자 ID", example = "1", required = true)
             @PathVariable
-            @Positive Long id) {
-        return new UserDto();
+            @Positive UUID id) {
+        UserDto userDto = userService.getUserById(id);
+        return ResponseEntity.ok(userDto);
     }
 
     @DeleteMapping("/{id}")
