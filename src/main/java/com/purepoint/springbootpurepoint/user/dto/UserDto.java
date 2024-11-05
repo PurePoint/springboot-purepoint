@@ -7,7 +7,6 @@ import java.util.UUID;
 
 @Getter
 public class UserDto {
-
     @Schema(description="사용자의 ID", example="1", required=true)
     private UUID id;
     @Schema( description = "사용자의 닉네임", example = "park", required = true )

@@ -16,7 +16,7 @@ public interface UserService {
      * @param password 사용자의 비밀번호
      * @return 로그인된 사용자의 정보를 담은 Optional 객체
      */
-    Optional<User> login(String username, String password);
+    Optional<User> loginUser(String username, String password);
 
     /**
      * 새로운 사용자를 생성합니다. (회원가입)
