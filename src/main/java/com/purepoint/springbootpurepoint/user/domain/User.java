@@ -29,8 +29,8 @@ public class User {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "profile_picture")
-    private String profilePicture;
+    @Column(name = "profile_image")
+    private String profileImage;
 
     @Column(name = "social_id")
     private String socialId;
