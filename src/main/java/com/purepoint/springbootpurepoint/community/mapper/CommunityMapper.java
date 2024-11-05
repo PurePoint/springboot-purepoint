@@ -5,7 +5,6 @@ import com.purepoint.springbootpurepoint.community.dto.CommunityRequestDto;
 import com.purepoint.springbootpurepoint.community.dto.CommunityResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Optional;

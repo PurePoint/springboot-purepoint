@@ -6,7 +6,7 @@ import com.purepoint.springbootpurepoint.community.dto.CommunityResponseDto;
 import com.purepoint.springbootpurepoint.community.mapper.CommunityMapper;
 import com.purepoint.springbootpurepoint.community.repository.CommunityRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommunityServiceImpl implements CommunityService{
 
     private final CommunityRepository communityRepository;
@@ -53,13 +53,13 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     public CommunityResponseDto getLatestPostById(CommunityRequestDto.getBoardId communityRequestDto) {
-        Optional<Community> community = communityRepository.findByIdOrderByPostAtDesc(communityRequestDto.getBoardID(), Sort.by("postAt").descending());
+        Optional<Community> community = communityRepository.findByBoardIdOrderByPostAtDesc(communityRequestDto.getBoardID(), Sort.by("postAt").descending());
         return communityMapper.getPost(community);
     }
 
     @Override
     public CommunityResponseDto getPopularPostById(CommunityRequestDto.getBoardId communityRequestDto) {
-        Optional<Community> community = communityRepository.findByIdOrderByPostViewDesc(communityRequestDto.getBoardID(), Sort.by("postView").descending());
+        Optional<Community> community = communityRepository.findByBoardIdOrderByPostViewDesc(communityRequestDto.getBoardID(), Sort.by("postView").descending());
         return communityMapper.getPost(community);
     }
 

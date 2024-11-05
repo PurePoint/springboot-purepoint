@@ -59,7 +59,7 @@ public class CommunityController {
     @Operation(summary = "조회순으로 게시글을 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
-    @GetMapping("/getLatestPostById")
+    @GetMapping("/getPopularPostById")
     public CommunityResponseDto getPopularPostById(@RequestBody CommunityRequestDto.getBoardId communityRequestDto) {
         CommunityResponseDto getPopularPostById = communityService.getPostById(communityRequestDto);
         return getPopularPostById;
