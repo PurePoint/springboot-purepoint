@@ -1,21 +1,24 @@
 package com.purepoint.springbootpurepoint.user.domain;
 
 import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "User")
 @Getter
 @Setter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Table(name = "User")
 public class User {
 
     @Id
@@ -29,8 +32,8 @@ public class User {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "profile_picture")
-    private String profilePicture;
+    @Column(name = "profile_image")
+    private String profileImage;
 
     @Column(name = "social_id")
     private String socialId;
@@ -38,10 +41,10 @@ public class User {
     @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @Column(name = "delete_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime deleteAt;
+    // 기본값을 NULL로 설정
+    @Column(name = "deleted_at", columnDefinition = "DATETIME DEFAULT NULL")
+    private LocalDateTime deletedAt;
 
     @Column(name = "password")
     private String password;
-
 }
