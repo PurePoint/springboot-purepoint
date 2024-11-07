@@ -41,6 +41,13 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @PostMapping("")
+    public ResponseEntity<UserDto> createUser(
+            @RequestBody UserDto userDto) {
+        return null;
+    }
+
     @GetMapping("")
     public String test() {
         return "Hello User";

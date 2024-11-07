@@ -21,7 +21,7 @@ public class User {
 
     @Id
     @Column(name = "user_id", columnDefinition = "CHAR(36)")
-    private UUID userId = UUID.randomUUID();
+    private UUID userId;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;

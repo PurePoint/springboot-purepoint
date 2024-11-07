@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    
+
     private final UserRepository userRepository;
 
     @Override
@@ -49,7 +49,14 @@ public class UserServiceImpl implements UserService {
 
         // 프로필 URL 변경
         user.setProfileImage(profileImageUrl);
-        return null;
+        userRepository.save(user);
+
+        // 유저 정보 반환
+        return UserDto.builder()
+                .id(user.getUserId())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
     }
 
     @Override
@@ -57,7 +64,16 @@ public class UserServiceImpl implements UserService {
         // 아이디를 통해 사용자 검색
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-        return null;
+
+        user.setNickname(nickname);
+        userRepository.save(user);
+
+        // 유저 정보 반환
+        return UserDto.builder()
+                .id(user.getUserId())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
     }
 
     @Override
