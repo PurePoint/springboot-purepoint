@@ -1,29 +1,25 @@
 package com.purepoint.springbootpurepoint.user.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "User")
 @Getter
 @Setter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Table(name = "User")
 public class User {
 
     @Id
-    @Column(name = "user_id", columnDefinition = "CHAR(36)")
-    private UUID userId = UUID.randomUUID();
+    @GeneratedValue
+    @Column(name = "user_id", nullable = false, unique = true)
+    private UUID userId;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -31,8 +27,8 @@ public class User {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "profile_picture")
-    private String profilePicture;
+    @Column(name = "profile_image")
+    private String profileImage;
 
     @Column(name = "social_id")
     private String socialId;
@@ -40,10 +36,10 @@ public class User {
     @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @Column(name = "delete_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime deleteAt;
+    // 기본값을 NULL로 설정
+    @Column(name = "deleted_at", columnDefinition = "DATETIME DEFAULT NULL")
+    private LocalDateTime deletedAt;
 
     @Column(name = "password")
     private String password;
-
 }

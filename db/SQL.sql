@@ -154,4 +154,3 @@ CREATE TABLE ReportType
     report_type_id TINYINT PRIMARY KEY, #1: 게시글, 2: 댓글, 3: 대댓글
     report_name    VARCHAR(25)          #신고 유형
 );
-`
