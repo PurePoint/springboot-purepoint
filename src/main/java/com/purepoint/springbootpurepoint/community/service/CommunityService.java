@@ -2,10 +2,9 @@ package com.purepoint.springbootpurepoint.community.service;
 
 
 import com.purepoint.springbootpurepoint.community.domain.Community;
-import com.purepoint.springbootpurepoint.community.dto.CommunityRequestDto;
-import com.purepoint.springbootpurepoint.community.dto.CommunityResponseDto;
+import com.purepoint.springbootpurepoint.community.dto.*;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 public interface CommunityService {
@@ -16,45 +15,48 @@ public interface CommunityService {
      * @param communityRequestDto 생성할 게시글 정보
      * @return 생성된 게시글 정보
      */
-    Community createPost(CommunityRequestDto.createPost communityRequestDto);
+    Community createPost(CommCreatePostReqDto communityRequestDto);
 
     /**
-     * 작성된 게시글을 수정합니다.
-     * 
-     * @param boardId 수정할 게시글의 ID
-     * @param newTitle 새로운 게시글 제목
-     * @param newContent 새로운 게시글 내용
+     * @param communityRequestDto 수정할 게시글 정보
      * @return 수정된 게시글 정보
      */
-    Community updatePost(CommunityRequestDto.updatePost communityRequestDto);
+    Community updatePost(CommUpdatePostReqDto communityRequestDto);
 
     /**
-     * 게시글을 조회합니다.
+     * @return 조회된 게시글 정보
+     */
+    List<CommReadPostResDto> getPost();
+
+    /**
+     * @return 최신순으로 조회된 게시글 정보
+     */
+    List<CommReadPostResDto> getLatestPost();
+
+
+    /**
+     * @return 조회순(인기순)으로 조회할 게시글 정보
+     */
+    List<CommReadPostResDto> getPopularPost();
+
+    /**
+     * @param postId 삭제할 게시글 정보
+     */
+    void deletePost(UUID postId);
+
+    /**
+     * 게시글 ID로 상세 정보를 조회합니다.
      *
-     * @param boardId 조회할 게시글의 ID
-     * @return 조회된 게시글의 정보를 담은 Optional 객체
+     * @param postId 게시글 ID
+     * @return 조회된 게시글 상세 정보
      */
-    CommunityResponseDto getPostById(CommunityRequestDto.getBoardId communityRequestDto);
+    CommDetailPostResDto getDetailPost(UUID postId);
 
     /**
-     * 최신순으로 게시글을 조회합니다.
+     * 게시글 ID로 댓글 목록을 조회합니다.
      *
-     * @param boardId 조회할 게시글의 ID
-     * @return 최신순으로 조회된 게시글의 정보를 담은 Optional 객체
+     * @param postId 게시글 ID
+     * @return 조회된 댓글 목록
      */
-    CommunityResponseDto getLatestPostById(CommunityRequestDto.getBoardId communityRequestDto);
-
-    /**
-     * 조회순으로 게시글을 조회합니다.
-     *
-     * @param boardId 조회할 게시글의 ID
-     * @return 조회순으로 조회된 게시글의 정보를 담은 Optional 객체
-     */
-    CommunityResponseDto getPopularPostById(CommunityRequestDto.getBoardId communityRequestDto);
-
-    /**
-     * @param boardId 삭제할 게시글의 ID
-     */
-    void deletePost(CommunityRequestDto.getBoardId communityRequestDto);
-    
+    List<CommCommentResDto> getCommentsPost(UUID postId);
 }

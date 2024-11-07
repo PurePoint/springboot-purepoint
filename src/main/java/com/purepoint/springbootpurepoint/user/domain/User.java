@@ -1,9 +1,6 @@
 package com.purepoint.springbootpurepoint.user.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -22,8 +19,9 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(name = "user_id", columnDefinition = "CHAR(36)")
-    private UUID userId = UUID.randomUUID();
+    @GeneratedValue
+    @Column(name = "user_id", nullable = false, unique = true)
+    private UUID userId;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;

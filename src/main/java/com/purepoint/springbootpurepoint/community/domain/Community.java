@@ -1,16 +1,14 @@
 package com.purepoint.springbootpurepoint.community.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.purepoint.springbootpurepoint.user.domain.User;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Board")
+@Table(name = "community")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,11 +17,13 @@ import java.util.UUID;
 public class Community {
 
     @Id
-    @Column(name = "board_id", columnDefinition = "CHAR(36)")
-    private UUID boardId = UUID.randomUUID();
+    @GeneratedValue
+    @Column(name = "post_id", nullable = false, unique = true)
+    private UUID postId;
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @ManyToOne(fetch = FetchType.LAZY) //지연로딩
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private User user;
 
     @Column(name = "post_title", nullable = false)
     private String postTitle;
