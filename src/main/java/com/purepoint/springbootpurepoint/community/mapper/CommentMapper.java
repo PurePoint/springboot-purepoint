@@ -14,7 +14,7 @@ public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
     @Mapping(source = "user.nickname", target = "nickname")
-    @Mapping(source = "user.profilePicture", target = "profilePicture")
+    @Mapping(source = "user.profileImage", target = "profileImage")
     CommCommentResDto toDto(Comment comment);  // Comment 하나를 변환하는 메서드
 
     List<CommCommentResDto> toDto(List<Comment> comment);  // List<Comment>를 List<CommCommentResDto>로 변환하는 메서드

@@ -2,11 +2,7 @@ package com.purepoint.springbootpurepoint.user.domain;
 
 import jakarta.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

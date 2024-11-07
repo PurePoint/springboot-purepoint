@@ -19,6 +19,6 @@ public class CommCommentResDto {
     @Schema(description = "댓글 수정일", example = "24.11.06", required = true)
     private LocalDateTime commentUpdateAt;
     @Schema(description = "댓글 작성자의 프로필 사진", example = "사진", required = true)
-    private String profilePicture;
+    private String profileImage;
 
 }
