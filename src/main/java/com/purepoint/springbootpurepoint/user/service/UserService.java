@@ -25,7 +25,7 @@ public interface UserService {
      * @param user 생성할 사용자 정보
      * @return 생성된 사용자 정보
      */
-    UserDto createUser(User user);
+    UserDto createUser(User userDto);
 
     /**
      * 사용자의 프로필 사진을 수정합니다.
