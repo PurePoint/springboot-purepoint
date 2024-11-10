@@ -8,6 +8,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @GetMapping("/login/google")
