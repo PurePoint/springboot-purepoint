@@ -12,7 +12,7 @@ import java.io.IOException;
 public class AuthController {
 
     @GetMapping("/login/google")
-    public void googleLogin(HttpServletResponse response) throws IOException {
+    public String googleLogin() throws IOException {
         String redirectUrl = "https://accounts.google.com/o/oauth2/v2/auth"
                 + "?scope=profile%20email"
                 + "&access_type=offline"
@@ -22,7 +22,7 @@ public class AuthController {
                 + "&redirect_uri=" + "http://localhost:3000/redirect"
                 + "&client_id=" + "69356984572-fhmvvd12bdhvaq33peiu1t0jl2vvmob1.apps.googleusercontent.com";
 
-        response.sendRedirect(redirectUrl);
+        return redirectUrl;
     }
 
     @GetMapping("/login/google/callback")
