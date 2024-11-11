@@ -2,7 +2,11 @@ package com.purepoint.springbootpurepoint.community.service;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
-import com.purepoint.springbootpurepoint.community.dto.*;
+import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 import com.purepoint.springbootpurepoint.community.mapper.CommentMapper;
 import com.purepoint.springbootpurepoint.community.mapper.CommunityMapper;
 import com.purepoint.springbootpurepoint.community.repository.CommentRepository;
@@ -57,13 +61,13 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     public List<CommReadPostResDto> getLatestPost() {
-        List<Community> community = communityRepository.findAll(Sort.by("postAt").descending());
+        List<Community> community = communityRepository.findAll(Sort.by(Sort.Order.desc("postAt")));
         return communityMapper.toDto(community);
     }
 
     @Override
     public List<CommReadPostResDto> getPopularPost() {
-        List<Community> community = communityRepository.findAll(Sort.by("postView").descending());
+        List<Community> community = communityRepository.findAll(Sort.by(Sort.Order.desc("postView")));
         return communityMapper.toDto(community);
     }
 
@@ -91,5 +95,11 @@ public class CommunityServiceImpl implements CommunityService{
         List<Comment> comments = commentRepository.findByPostId(postId);
         return commentMapper.toDto(comments);
     }
+
+    // ToDo 새 댓글 생성 서비스 구현
+
+    // ToDo 댓글 수정 서비스 구현
+
+    // ToDo 댓글 삭제 서비스 구현
 
 }

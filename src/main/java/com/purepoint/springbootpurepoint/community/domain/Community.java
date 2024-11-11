@@ -3,6 +3,7 @@ package com.purepoint.springbootpurepoint.community.domain;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -34,7 +35,8 @@ public class Community {
     @Column(name = "post_views")
     private Integer postView;
 
-    @Column(name = "post_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "post_at")
+    @CreationTimestamp
     private LocalDateTime postAt;
 
     @Column(name = "post_update_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

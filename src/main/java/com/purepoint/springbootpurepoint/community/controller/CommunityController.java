@@ -1,7 +1,12 @@
 package com.purepoint.springbootpurepoint.community.controller;
 
+import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
-import com.purepoint.springbootpurepoint.community.dto.*;
+import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 import com.purepoint.springbootpurepoint.community.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,8 +50,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
     @GetMapping("/")
     public List<CommReadPostResDto> getPost() {
-        List<CommReadPostResDto> getPost = communityService.getPost();
-        return getPost;
+        return communityService.getPost();
     }
 
     @Operation(summary = "최신순으로 게시글을 조회합니다.")
@@ -54,8 +58,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
     @GetMapping("/latest")
     public List<CommReadPostResDto> getLatestPost() {
-        List<CommReadPostResDto> getLatestPost = communityService.getLatestPost();
-        return getLatestPost;
+        return communityService.getLatestPost();
     }
 
     @Operation(summary = "조회순으로 게시글을 조회합니다.")
@@ -63,8 +66,7 @@ public class CommunityController {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
     @GetMapping("/favorites")
     public List<CommReadPostResDto> getPopularPost() {
-        List<CommReadPostResDto> getPopularPost = communityService.getPopularPost();
-        return getPopularPost;
+        return communityService.getPopularPost();
     }
 
     @Operation(summary = "게시글을 삭제합니다.")
@@ -91,4 +93,30 @@ public class CommunityController {
         return communityService.getCommentsPost(postId);
     }
 
+    @Operation(summary = "새 댓글을 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 생성")})
+    @GetMapping("/comments")
+    public ResponseEntity<Comment> createCommentsPost() {
+        // ToDo 댓글 생성 서비스 호출
+        return null;
+    }
+
+    @Operation(summary = "댓글을 수정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 수정")})
+    @GetMapping("/comments")
+    public ResponseEntity<Comment> updateCommentsPost() {
+        // ToDo 댓글 수정 서비스 호출
+        return null;
+    }
+
+    @Operation(summary = "댓글을 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 삭제")})
+    @GetMapping("/comments")
+    public ResponseEntity<Comment> deleteCommentsPost() {
+        // ToDo 댓글 삭제 서비스 호출
+        return null;
+    }
 }

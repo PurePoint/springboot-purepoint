@@ -2,7 +2,11 @@ package com.purepoint.springbootpurepoint.community.service;
 
 
 import com.purepoint.springbootpurepoint.community.domain.Community;
-import com.purepoint.springbootpurepoint.community.dto.*;
+import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -59,4 +63,10 @@ public interface CommunityService {
      * @return 조회된 댓글 목록
      */
     List<CommCommentResDto> getCommentsPost(UUID postId);
+
+    // ToDo 새 댓글 생성 서비스 구현
+
+    // ToDo 댓글 수정 서비스 구현
+
+    // ToDo 댓글 삭제 서비스 구현
 }

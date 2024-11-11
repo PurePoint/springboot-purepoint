@@ -1,7 +1,10 @@
 package com.purepoint.springbootpurepoint.community.mapper;
 
 import com.purepoint.springbootpurepoint.community.domain.Community;
-import com.purepoint.springbootpurepoint.community.dto.*;
+import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

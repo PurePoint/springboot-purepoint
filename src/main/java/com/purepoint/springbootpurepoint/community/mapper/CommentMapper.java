@@ -1,7 +1,7 @@
 package com.purepoint.springbootpurepoint.community.mapper;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
-import com.purepoint.springbootpurepoint.community.dto.CommCommentResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
