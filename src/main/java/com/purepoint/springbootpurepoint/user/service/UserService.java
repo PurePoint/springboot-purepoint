@@ -68,4 +68,7 @@ public interface UserService {
      * @param userId 삭제할 사용자의 ID
      */
     void deleteUser(UUID userId);
+
+    // 유저 조회 및 생성
+    UserDto findOrCreateUser(String userId, String email, String name);
 }

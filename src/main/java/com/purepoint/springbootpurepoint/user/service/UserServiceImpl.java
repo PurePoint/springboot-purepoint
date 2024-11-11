@@ -119,5 +119,8 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    //test
+    @Override
+    public UserDto findOrCreateUser(String userId, String email, String name) {
+        return null;
+    }
 }
