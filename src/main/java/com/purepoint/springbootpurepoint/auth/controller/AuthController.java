@@ -1,5 +1,6 @@
 package com.purepoint.springbootpurepoint.auth.controller;
 
+import com.purepoint.springbootpurepoint.auth.dto.response.UserResponseDto;
 import com.purepoint.springbootpurepoint.auth.service.AuthService;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -41,14 +43,23 @@ public class AuthController {
         return redirectUrl;
     }
 
+    // 임시
     @Operation(summary = "구글 로그인 콜백", description = "구글 로그인 후 콜백 처리합니다")
     @GetMapping("/login/google/callback")
-    public UserDto googleCallback(@RequestParam("code") String authCode) {
+    public ResponseEntity<UserResponseDto> googleCallback(@RequestParam("code") String authCode) {
 
         // 요청 로그 확인
         log.info("요청: Auth code received: " + authCode);
 
         // 로그인 처리
-        return authService.handleGoogleCallback(authCode);
+        //return authService.handleGoogleCallback(authCode);
+
+        UserResponseDto Res = UserResponseDto.builder()
+                .Token(null)
+                .RefreshToken(null)
+                .UserInfo(null)
+                .loginStatus(true)
+                .build();
+        return ResponseEntity.ok(Res);
     }
 }
