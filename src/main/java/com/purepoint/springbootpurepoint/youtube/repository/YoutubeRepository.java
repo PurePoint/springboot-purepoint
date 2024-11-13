@@ -1,4 +1,8 @@
 package com.purepoint.springbootpurepoint.youtube.repository;
 
-public interface YoutubeRepository {
+import com.purepoint.springbootpurepoint.youtube.domain.Youtube;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface YoutubeRepository extends JpaRepository<Youtube, String> {
+
 }

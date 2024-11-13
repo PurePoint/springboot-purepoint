@@ -96,8 +96,8 @@ public class CommunityController {
     @Operation(summary = "새 댓글을 생성합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 댓글 생성")})
-    @GetMapping("/comments")
-    public ResponseEntity<Comment> createCommentsPost() {
+    @PostMapping("/{postId}/createComments")
+    public ResponseEntity<Comment> createCommentsPost(@PathVariable UUID postId) {
         // ToDo 댓글 생성 서비스 호출
         return null;
     }
@@ -105,8 +105,8 @@ public class CommunityController {
     @Operation(summary = "댓글을 수정합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 댓글 수정")})
-    @GetMapping("/comments")
-    public ResponseEntity<Comment> updateCommentsPost() {
+    @PutMapping("/updateComments/{commentId}")
+    public ResponseEntity<Comment> updateCommentsPost(@PathVariable UUID commentId) {
         // ToDo 댓글 수정 서비스 호출
         return null;
     }
@@ -114,8 +114,8 @@ public class CommunityController {
     @Operation(summary = "댓글을 삭제합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 댓글 삭제")})
-    @GetMapping("/comments")
-    public ResponseEntity<Comment> deleteCommentsPost() {
+    @DeleteMapping("/deleteComments/{commentId}")
+    public ResponseEntity<Comment> deleteCommentsPost(@PathVariable UUID commentId) {
         // ToDo 댓글 삭제 서비스 호출
         return null;
     }
