@@ -21,6 +21,8 @@ import java.io.IOException;
 public class AuthController {
 
     private final AuthService authService;
+    
+    // TODO 로직을 조금 바꿔야 겠어. 프로바이더를 받아서 처리하는 걸로
 
     @Operation(summary = "구글 로그인", description = "구글 로그인 페이지 URL을 요청합니다.")
     @ApiResponses(value = {

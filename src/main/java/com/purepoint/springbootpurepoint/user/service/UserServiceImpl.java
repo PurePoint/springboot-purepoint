@@ -5,6 +5,7 @@ import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,13 +17,23 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
     @Override
-    public UserDto loginUser(String nickname, String password) {
-        // TODO OAuth2를 통한 구글, 깃허브 로그인 구현
+    public UserDto loginUser(String providerName, String providerId, String email) {
+        // TODO OAuth2를 통한 로그인 구현
+
+        // 프로바이더와 providerName, providerId, email가 모두 일치하는 사용자가 있는지 확인
+        Optional<User> user = userRepository.findByProviderNameAndProviderIdAndEmail(providerName, providerId, email);
+
+        // 회원이 없으면
+        if(user.isEmpty()){
+            log.info("신규 회원입니다. 회원가입을 진행합니다.");
+        }
+
         return null;
     }
 
@@ -68,24 +79,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         user.setNickname(nickname);
-        userRepository.save(user);
-
-        // 유저 정보 반환
-        return UserDto.builder()
-                .id(user.getUserId())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
-    }
-
-    @Override
-    public UserDto updateUserPassword(UUID userId, String newPassword) {
-        // 아이디를 통해 사용자 검색
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-
-        // 해당 사용자의 패스워드 변경
-        user.setPassword(newPassword);
         userRepository.save(user);
 
         // 유저 정보 반환

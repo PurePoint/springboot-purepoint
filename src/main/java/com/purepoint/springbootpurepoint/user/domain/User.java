@@ -31,8 +31,11 @@ public class User {
     @Column(name = "profile_image")
     private String profileImage;
 
-    @Column(name = "social_id")
-    private String socialId;
+    @Column(name = "provider_id")  // 프로바이더 마다의 고유 식별자 (구글:sub, 카카오:id ..)
+    private String providerId;
+
+    @Column(name = "provider_name")
+    private String providerName;
 
     @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
@@ -40,8 +43,5 @@ public class User {
     // 기본값을 NULL로 설정
     @Column(name = "deleted_at", columnDefinition = "DATETIME DEFAULT NULL")
     private LocalDateTime deletedAt;
-
-    @Column(name = "password")
-    private String password;
 
 }

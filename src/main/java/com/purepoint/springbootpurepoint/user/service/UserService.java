@@ -10,14 +10,8 @@ import com.purepoint.springbootpurepoint.user.dto.UserDto;
  */
 public interface UserService {
 
-    /**
-     * 사용자를 로그인합니다.
-     *
-     * @param nickname 사용자의 사용자명
-     * @param password 사용자의 비밀번호
-     * @return 로그인된 사용자의 정보를 담은 Optional 객체
-     */
-    UserDto loginUser(String nickname, String password);
+    // 사용자의 소셜 로그인 정보를 받아 로그인을 진행합니다.
+    UserDto loginUser(String providerName, String providerId, String email);
 
     /**
      * 새로운 사용자를 생성합니다. (회원가입)
@@ -44,15 +38,6 @@ public interface UserService {
      * @return 수정된 사용자 정보
      */
     UserDto updateUserNickname(UUID userId, String nickname);
-
-    /**
-     * 사용자의 비밀번호를 수정합니다.
-     *
-     * @param userId 비밀번호를 수정할 사용자의 ID
-     * @param newPassword 새로운 비밀번호
-     * @return 수정된 사용자 정보
-     */
-    UserDto updateUserPassword(UUID userId, String newPassword);
 
     /**
      * 특정 ID를 가진 사용자를 조회합니다.

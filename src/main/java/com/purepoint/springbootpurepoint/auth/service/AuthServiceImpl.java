@@ -5,7 +5,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.purepoint.springbootpurepoint.auth.dto.response.UserResponseDto;
-import com.purepoint.springbootpurepoint.user.dto.request.UserCreateDto;
 import com.purepoint.springbootpurepoint.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 // TODO : 나중에 Openfeign 으로 변경할 것.
 
@@ -33,13 +31,15 @@ public class AuthServiceImpl implements AuthService{
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String googleClientSecret;
 
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String googleRedirectUri;
+
     @Override
     public UserResponseDto handleGoogleCallback(String authCode) {
 
         // 받은 인증 코드를 통해 구글 OAuth (엑세스, 리프레시)토큰으로 교환
         String OauthTokenUrl = "https://oauth2.googleapis.com/token";
-        UserResponseDto userResponseDto = null;
-        
+
         try {
             GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
                     new NetHttpTransport(),
@@ -48,20 +48,35 @@ public class AuthServiceImpl implements AuthService{
                     googleClientId,
                     googleClientSecret,
                     authCode,
-                    "YOUR_REDIRECT_URI"
+                    googleRedirectUri
             ).execute();
 
             String accessToken = tokenResponse.getAccessToken();
             String refreshToken = tokenResponse.getRefreshToken();
 
-            // OAuth 토큰으로 사용자 조회
+            log.info("accessToken : {}", accessToken);
+            log.info("refreshToken : {}", refreshToken);
 
-            // 아이디,  회원가입
+
+            Map<String, Object> userInfo = getUserInfo(accessToken);
+            log.info("userInfo : {}", userInfo);
+            log.info(userInfo.get("sub").toString());
+            log.info(userInfo.get("name").toString());
+            log.info(userInfo.get("email").toString());
+            log.info(userInfo.get("picture").toString());
+
+            // 이 프로바이더 OAuth 를 통해 가입한 유저인지 검증
+            userService.loginUser("google", userInfo.get("sub").toString(), userInfo.get("email").toString());
+
+            // 신규 유저이면 프로바이더 정보와 신규 유저 정보를 반환 회원가입
+
+            // 이미 가입된 유저이면 유저 정보 반환ㅂ
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
