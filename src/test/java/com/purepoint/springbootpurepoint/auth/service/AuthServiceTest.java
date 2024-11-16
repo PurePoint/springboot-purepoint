@@ -23,12 +23,16 @@ public class AuthServiceTest {
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String googleRedirectUri;
 
+    // 작성중
     @Test
     @DisplayName( "Google OAuth Callback Test")
     public void handleGoogleCallbackTest() {
-        String authCode = "4/0AeanS0YrZiPCWGZAHyirt9B-EEMrDsf4olAfBq80meVG5kmVdXiLv9YhMNL0DfZzJEPvkg";
+        // 임의의 AuthCode
+        String authCode = "4/0AeanS0YFgAdWtJYtdaFdBZwUMGnfrBozXQVhBVuQk5s8Pglo2-8PUSNhuTsMEZdwgF50JA";
 
+        // 소션 로그인 서비스 확인
         authService.handleGoogleCallback(authCode);
-
+        
+        // 작성중
     }
 }

@@ -1,5 +1,7 @@
 package com.purepoint.springbootpurepoint.user.service;
 
+import com.purepoint.springbootpurepoint.user.dto.UserStatus;
+import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import com.purepoint.springbootpurepoint.user.exception.UserNotFoundException;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
@@ -23,18 +25,37 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDto loginUser(String providerName, String providerId, String email) {
+    public UserLoginResponseDto loginUser(String providerName, String providerId, String email) {
         // TODO OAuth2를 통한 로그인 구현
 
         // 프로바이더와 providerName, providerId, email가 모두 일치하는 사용자가 있는지 확인
-        Optional<User> user = userRepository.findByProviderNameAndProviderIdAndEmail(providerName, providerId, email);
+        try {
+            Optional<User> userOptional = userRepository.findByProviderNameAndProviderIdAndEmail(providerName, providerId, email);
 
-        // 회원이 없으면
-        if(user.isEmpty()){
-            log.info("신규 회원입니다. 회원가입을 진행합니다.");
+            // 유저 정보가 있는 경우
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                UserDto userDto = UserDto.builder()
+                        .userId(user.getUserId())
+                        .nickname(user.getNickname())
+                        .email(user.getEmail())
+                        .build();
+
+                return UserLoginResponseDto.builder()
+                        .userInfo(userDto)
+                        .userStatus(UserStatus.ACTIVE)
+                        .build();
+            } else {
+                // 유저 정보가 없는 경우 신규 유저라는 표시
+                return UserLoginResponseDto.builder()
+                        .userInfo(null)
+                        .userStatus(UserStatus.NEW)
+                        .build();
+            }
+        } catch (Exception e) {
+            log.error("로그인 중 예외 발생: ", e);
+            throw new RuntimeException("로그인 중 문제가 발생했습니다.");
         }
-
-        return null;
     }
 
     @Override
@@ -48,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
         // 유저 정보 반환
         return UserDto.builder()
-                .id(savedUser.getUserId())
+                .userId(savedUser.getUserId())
                 .nickname(savedUser.getNickname())
                 .email(savedUser.getEmail())
                 .build();
@@ -66,7 +87,7 @@ public class UserServiceImpl implements UserService {
 
         // 유저 정보 반환
         return UserDto.builder()
-                .id(user.getUserId())
+                .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .build();
@@ -83,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
         // 유저 정보 반환
         return UserDto.builder()
-                .id(user.getUserId())
+                .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .build();
@@ -97,7 +118,7 @@ public class UserServiceImpl implements UserService {
 
         // 유저 정보 반환
         return UserDto.builder()
-                .id(user.getUserId())
+                .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .build();

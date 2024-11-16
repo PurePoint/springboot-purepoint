@@ -45,20 +45,11 @@ public class AuthController {
     // 임시
     @Operation(summary = "구글 로그인 콜백", description = "구글 로그인 후 인증토큰을 가지고 사용자 정보를 콜백 처리합니다")
     @GetMapping("/login/google/callback")
-    public ResponseEntity<UserResponseDto> googleCallback(@RequestParam("code") String authCode) {
+    public ResponseEntity<UserResponseDto> googleCallback(@RequestParam("code") String authCode) throws IOException {
 
         // 요청 로그 확인
         log.info("요청: Auth code received: " + authCode);
 
-        // 로그인 처리
-        //return authService.handleGoogleCallback(authCode);
-
-        UserResponseDto Res = UserResponseDto.builder()
-                .Token(null)
-                .RefreshToken(null)
-                .UserInfo(null)
-                .loginStatus(true)
-                .build();
-        return ResponseEntity.ok(Res);
+        return ResponseEntity.ok(authService.handleGoogleCallback(authCode));
     }
 }

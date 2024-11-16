@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
+import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 
 /**
  * 사용자 관리에 대한 서비스 인터페이스를 제공합니다.
@@ -11,7 +12,7 @@ import com.purepoint.springbootpurepoint.user.dto.UserDto;
 public interface UserService {
 
     // 사용자의 소셜 로그인 정보를 받아 로그인을 진행합니다.
-    UserDto loginUser(String providerName, String providerId, String email);
+    UserLoginResponseDto loginUser(String providerName, String providerId, String email);
 
     /**
      * 새로운 사용자를 생성합니다. (회원가입)
