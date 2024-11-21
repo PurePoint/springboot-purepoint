@@ -3,6 +3,7 @@ package com.purepoint.springbootpurepoint.user.service;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
@@ -30,7 +31,8 @@ public class UserServiceTest {
     @Transactional
     public void 사용자_로그인_테스트() {
         // 새 사용자를 생성합니다. (기존 유저가 있다고 가정)
-        User user = mockUser(); // 임시 데이터를 생성
+        // User user = mockUser(); // 임시 데이터를 생성
+        UserCreateRequestDto user = mockCreateRequestUser();
         UserDto createdUser = userService.createUser(user);
         log.info("유저 생성됨 {}", createdUser.getNickname());
 
@@ -68,4 +70,14 @@ public class UserServiceTest {
                 .providerName("google")
                 .build();
     }
+
+    // 테스트할 목업 데이터
+    private UserCreateRequestDto mockCreateRequestUser() {
+        return UserCreateRequestDto.builder()
+                .email("test@test.com")
+                .nickname("박정현")
+                .password("<PASSWORD>")
+                .build();
+    }
+
 }

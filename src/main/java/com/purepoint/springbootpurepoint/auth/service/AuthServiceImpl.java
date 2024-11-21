@@ -6,8 +6,11 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.purepoint.springbootpurepoint.auth.dto.response.UserResponseDto;
 import com.purepoint.springbootpurepoint.auth.jwt.JwtTokenProvider;
+import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
+import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import com.purepoint.springbootpurepoint.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +28,11 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthServiceImpl implements AuthService{
-    
+public class AuthServiceImpl implements AuthService {
+
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
@@ -52,13 +56,31 @@ public class AuthServiceImpl implements AuthService{
             UserLoginResponseDto loginUser = userService.loginUser("google", userInfo.get("sub").toString(), userInfo.get("email").toString());
 
             // 만약에 사용자의 상태가 UserStatus.NEW 이면
-            if(loginUser.getUserStatus().equals(UserStatus.NEW)){
+            if (loginUser.getUserStatus().equals(UserStatus.NEW)) {
                 log.info("신규 회원이 로그인을 시도했습니다.");
-                return UserResponseDto.builder()
-                        .loginStatus(UserStatus.NEW)
-                        .Token(null)
-                        .RefreshToken(null)
+
+                // 회원가입 진행
+                User createUser = User.builder()
+                        .nickname(userInfo.get("name").toString())
+                        .email(userInfo.get("email").toString())
+                        .providerName("google")
+                        .providerId(userInfo.get("sub").toString())
+                        .profileImage(userInfo.get("picture").toString())
                         .build();
+                userRepository.save(createUser);
+
+                // 사용자 로그인
+                UserLoginResponseDto newUser = userService.loginUser("google", userInfo.get("sub").toString(), userInfo.get("email").toString());
+
+                // 사용자 정보로 애플리케이션의 인증 토큰을 생성합니다.
+                String jwtToken = jwtTokenProvider.createToken(newUser.getUserInfo(), "user");
+
+                return UserResponseDto.builder()
+                        .Token(jwtToken)
+                        .RefreshToken(tokenData.get("refreshToken").toString())
+                        .loginStatus(UserStatus.ACTIVE)
+                        .build();
+
             } else {
                 // 사용자 정보로 애플리케이션의 인증 토큰을 생성합니다.
                 String jwtToken = jwtTokenProvider.createToken(loginUser.getUserInfo(), "user");
@@ -98,6 +120,7 @@ public class AuthServiceImpl implements AuthService{
         return tokenData;
     }
 
+    // 엑세스 토큰을 가지고 사용자 정보를 조회하고 맵 형태로 반환합니다.
     private Map<String, Object> getUserInfo(String accessToken) {
         String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo"; // 유저 조회 URL
 

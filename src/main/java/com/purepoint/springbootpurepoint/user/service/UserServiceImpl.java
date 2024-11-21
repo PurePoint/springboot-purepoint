@@ -1,6 +1,7 @@
 package com.purepoint.springbootpurepoint.user.service;
 
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import com.purepoint.springbootpurepoint.user.exception.UserNotFoundException;
 import com.purepoint.springbootpurepoint.user.domain.User;
@@ -59,13 +60,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(User user) {
+    public UserDto createUser(UserCreateRequestDto userDto) {
         // TODO 시용자가 이미 존재하는지 검증
 
         // 사용자 정보가 들어오면, 해당 정보를 가지고 회원가입
-        User savedUser = userRepository.save(user);
+        User createUser = User.builder()
+                .nickname(userDto.getNickname())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .build();
 
-        //
+        User savedUser = userRepository.save(createUser);
 
         // 유저 정보 반환
         return UserDto.builder()

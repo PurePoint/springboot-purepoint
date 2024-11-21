@@ -44,4 +44,7 @@ public class User {
     @Column(name = "deleted_at", columnDefinition = "DATETIME DEFAULT NULL")
     private LocalDateTime deletedAt;
 
+    // 나중에 암호화 해야함.
+    @Column(name = "password", nullable = false)
+    private String password;
 }
