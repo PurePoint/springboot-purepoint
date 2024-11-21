@@ -1,6 +1,7 @@
 package com.purepoint.springbootpurepoint.user.controller;
 
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
 import com.purepoint.springbootpurepoint.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,8 +45,8 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<UserDto> createUser(
-            @RequestBody UserDto userDto) {
-        return null;
+            @RequestBody UserCreateRequestDto userDto) {
+        return ResponseEntity.ok(userService.createUser(userDto));
     }
 
     @GetMapping("")
