@@ -1,18 +1,15 @@
 package com.purepoint.springbootpurepoint.community.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@Builder
 public class CommCreatePostReqDto {
 
-    @Schema(description = "사용자의 ID", example = "1", required = true)
+    @Schema(description = "사용자의 ID", example = "550e8400-e29b-41d4-a716-446655440000", required = true)
     private UUID userId;
     @Schema(description = "새 게시글의 제목", example = "글제목", required = true)
     private String postTitle;

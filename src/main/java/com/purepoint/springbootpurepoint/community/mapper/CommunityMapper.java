@@ -13,29 +13,38 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 import java.util.Optional;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CommunityMapper {
     CommunityMapper INSTANCE = Mappers.getMapper(CommunityMapper.class);
 
     @Mapping(target = "postId", ignore = true)
-    @Mapping(target = "postView", constant = "0")
+    @Mapping(source = "userId", target = "user.userId")
+    @Mapping(source = "postTitle", target = "postTitle")
+    @Mapping(source = "postContent", target = "postContent")
     @Mapping(target = "postAt", ignore = true)
     @Mapping(target = "postUpdateAt", ignore = true)
     @Mapping(target = "postDeleteAt", ignore = true)
     Community createPostToEntity(CommCreatePostReqDto commCreatePostReqDto);
 
+    @Mapping(target = "postId", ignore = true)
+    @Mapping(source = "postTitle", target = "postTitle")
+    @Mapping(source = "postContent", target = "postContent")
+    @Mapping(target = "postUpdateAt", expression = "java(java.time.LocalDateTime.now())")
+    Community updatePostToEntity(CommUpdatePostReqDto commUpdatePostReqDto);
 
     @Mapping(target = "postId", ignore = true)
-    @Mapping(target = "postAt", ignore = true)
-    @Mapping(target = "postView", ignore = true)
-    @Mapping(target = "postUpdateAt", ignore = true)
-    @Mapping(target = "postDeleteAt", ignore = true)
-    void updatePostToEntity(CommUpdatePostReqDto commUpdatePostReqDto, @MappingTarget Community community);
-
-    CommReadPostResDto map(Community community);
+    @Mapping(target = "postDeleteAt", expression = "java(java.time.LocalDateTime.now())")
+    Community deletePostToEntity(Community community);
 
     List<CommReadPostResDto> toDto(List<Community> community);
 
-    CommDetailPostResDto detailPostToDto(Optional<Community> community);
+
+    @Mapping(source = "user.nickname", target = "postNickname")
+    @Mapping(target = "comments", ignore = true)
+    CommDetailPostResDto detailPostToDto(Community community);
+
+//    @Mapping(source = "user.profileImage", target = "profileImage")
+//    @Mapping(source = "user.nickname", target = "commentNickname")
+//    CommDetailCommentResDto commentToDto(Comment comment);
 
 }

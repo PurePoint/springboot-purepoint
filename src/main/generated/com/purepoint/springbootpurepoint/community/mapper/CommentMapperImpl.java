@@ -1,7 +1,6 @@
 package com.purepoint.springbootpurepoint.community.mapper;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
-import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import java.util.ArrayList;
 import java.util.List;

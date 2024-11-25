@@ -2,15 +2,16 @@ package com.purepoint.springbootpurepoint.community.service;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
+import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
-import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 import com.purepoint.springbootpurepoint.community.mapper.CommentMapper;
 import com.purepoint.springbootpurepoint.community.mapper.CommunityMapper;
 import com.purepoint.springbootpurepoint.community.repository.CommentRepository;
 import com.purepoint.springbootpurepoint.community.repository.CommunityRepository;
+import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -26,12 +27,16 @@ import java.util.UUID;
 public class CommunityServiceImpl implements CommunityService{
 
     private final CommunityRepository communityRepository;
+    private final UserRepository userRepository;
     private final CommunityMapper communityMapper = CommunityMapper.INSTANCE;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper = CommentMapper.INSTANCE;
 
     @Override
     public Community createPost(CommCreatePostReqDto commCreatePostReqDto) {
+        userRepository.findById(commCreatePostReqDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Community community = communityMapper.createPostToEntity(commCreatePostReqDto);
         community = communityRepository.save(community);
         return community;
@@ -43,8 +48,7 @@ public class CommunityServiceImpl implements CommunityService{
 
         if(optionalCommunity.isPresent()) {
             Community community = optionalCommunity.get();
-            communityMapper.updatePostToEntity(commUpdatePostReqDto, community);
-            community.setPostUpdateAt(LocalDateTime.now());
+            community = communityMapper.updatePostToEntity(commUpdatePostReqDto);
             community = communityRepository.save(community);
             return community;
 
@@ -77,7 +81,7 @@ public class CommunityServiceImpl implements CommunityService{
 
         if(optionalCommunity.isPresent()) {
             Community community = optionalCommunity.get();
-            community.setPostDeleteAt(LocalDateTime.now());
+            community = communityMapper.deletePostToEntity(community);
             communityRepository.save(community);
         } else {
             throw new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + postId);
@@ -86,17 +90,29 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     public CommDetailPostResDto getDetailPost(UUID postId) {
-        Optional<Community> community = communityRepository.findById(postId);
-        return communityMapper.detailPostToDto(community);
+//        Community community = communityRepository.findWithCommentsAndUserById(postId);
+//        CommDetailPostResDto dto = communityMapper.detailPostToDto(community);
+//        dto.builder()
+//                .comments(community.getComments().stream()
+//                        .map(communityMapper::commentToDto)
+//                        .collect(Collectors.toList()));
+//        return dto;
+        return null;
     }
 
-    @Override
-    public List<CommCommentResDto> getCommentsPost(UUID postId) {
-        List<Comment> comments = commentRepository.findByPostId(postId);
-        return commentMapper.toDto(comments);
-    }
 
     // ToDo 새 댓글 생성 서비스 구현
+    @Override
+    public Comment createComment(CommCreateCommentReqDto commCreateCommentReqDto) {
+        userRepository.findById(commCreateCommentReqDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        communityRepository.findById(commCreateCommentReqDto.getPostId())
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        Comment comment = commentMapper.createPostToEntity(commCreateCommentReqDto);
+        return commentRepository.save(comment);
+    }
 
     // ToDo 댓글 수정 서비스 구현
 
