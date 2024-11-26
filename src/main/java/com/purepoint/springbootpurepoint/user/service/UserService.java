@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateSocialRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 
 /**
@@ -22,7 +23,7 @@ public interface UserService {
      * @return 생성된 사용자 정보
      */
     UserDto createUser(UserCreateRequestDto userDto);
-
+    UserDto createSocialUser(UserCreateSocialRequestDto userDto);
     /**
      * 사용자의 프로필 사진을 수정합니다.
      *

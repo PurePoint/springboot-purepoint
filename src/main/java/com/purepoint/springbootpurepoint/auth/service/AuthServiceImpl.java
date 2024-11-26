@@ -9,6 +9,7 @@ import com.purepoint.springbootpurepoint.auth.jwt.JwtTokenProvider;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateSocialRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import com.purepoint.springbootpurepoint.user.service.UserService;
@@ -32,7 +33,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
@@ -47,12 +47,15 @@ public class AuthServiceImpl implements AuthService {
     public UserResponseDto handleGoogleCallback(String authCode) {
         try {
             // 받은 인증 코드를 통해 구글 OAuth (엑세스, 리프레시)토큰으로 교환
+            log.info("구글 OAuth (엑세스, 리프레시)토큰으로 교환");
             Map<String, Object> tokenData = getOauthToken(authCode);
 
             // 엑세스 토큰을 통해 사용자 정보 조회
+            log.info("엑세스 토큰을 통해 사용자 정보 조회");
             Map<String, Object> userInfo = getUserInfo(tokenData.get("accessToken").toString());
 
             // 이 프로바이더 OAuth 를 통해 가입한 유저인지 검증
+            log.info("프로바이더 OAuth 를 통해 가입한 유저인지 검증");
             UserLoginResponseDto loginUser = userService.loginUser("google", userInfo.get("sub").toString(), userInfo.get("email").toString());
 
             // 만약에 사용자의 상태가 UserStatus.NEW 이면
@@ -60,21 +63,29 @@ public class AuthServiceImpl implements AuthService {
                 log.info("신규 회원이 로그인을 시도했습니다.");
 
                 // 회원가입 진행
-                User createUser = User.builder()
-                        .nickname(userInfo.get("name").toString())
+                log.info("회원가입 진행");
+                UserCreateSocialRequestDto createUser = UserCreateSocialRequestDto.builder()
                         .email(userInfo.get("email").toString())
+                        .nickname(userInfo.get("name").toString())
                         .providerName("google")
                         .providerId(userInfo.get("sub").toString())
                         .profileImage(userInfo.get("picture").toString())
                         .build();
-                userRepository.save(createUser);
+                log.info("생성된 유저 저장 {}",createUser.toString());
+
+                userService.createSocialUser(createUser);
+
+                log.info("유저 정상적으로 생성 됬는지 확인 ");
 
                 // 사용자 로그인
+                log.info("사용자 로그인 시도 : {}", userInfo.get("email").toString());
                 UserLoginResponseDto newUser = userService.loginUser("google", userInfo.get("sub").toString(), userInfo.get("email").toString());
 
                 // 사용자 정보로 애플리케이션의 인증 토큰을 생성합니다.
+                log.info("사용자 인증 토큰 생성");
                 String jwtToken = jwtTokenProvider.createToken(newUser.getUserInfo(), "user");
 
+                log.info("인증 토큰 {}", jwtToken);
                 return UserResponseDto.builder()
                         .Token(jwtToken)
                         .RefreshToken(tokenData.get("refreshToken").toString())

@@ -2,6 +2,7 @@ package com.purepoint.springbootpurepoint.user.service;
 
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateSocialRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import com.purepoint.springbootpurepoint.user.exception.UserNotFoundException;
 import com.purepoint.springbootpurepoint.user.domain.User;
@@ -27,11 +28,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserLoginResponseDto loginUser(String providerName, String providerId, String email) {
-        // TODO OAuth2를 통한 로그인 구현
 
+        log.info("로그인 요청 들어옴 : {}", providerName + " : " + providerId + " : " + email);
         // 프로바이더와 providerName, providerId, email가 모두 일치하는 사용자가 있는지 확인
         try {
-            Optional<User> userOptional = userRepository.findByProviderNameAndProviderIdAndEmail(providerName, providerId, email);
+            Optional<User> userOptional = userRepository.findByEmail(email);
 
             // 유저 정보가 있는 경우
             if (userOptional.isPresent()) {
@@ -57,6 +58,31 @@ public class UserServiceImpl implements UserService {
             log.error("로그인 중 예외 발생: ", e);
             throw new RuntimeException("로그인 중 문제가 발생했습니다.");
         }
+    }
+
+    @Override
+    public UserDto createSocialUser(UserCreateSocialRequestDto userDto) {
+
+        log.info("소셜 아이디 생성 시작!");
+
+        User createUser = User.builder()
+                .nickname(userDto.getNickname())
+                .email(userDto.getEmail())
+                .profileImage(userDto.getProfileImage())
+                .providerId(userDto.getProviderId())
+                .providerName(userDto.getProviderName())
+                .build();
+
+        User userEntity = userRepository.save(createUser);
+
+        UserDto dto = UserDto.builder()
+                .userId(userEntity.getUserId())
+                .email(userEntity.getEmail())
+                .nickname(userEntity.getNickname())
+                .profileImage(userEntity.getProfileImage())
+                .build();
+
+        return dto;
     }
 
     @Override

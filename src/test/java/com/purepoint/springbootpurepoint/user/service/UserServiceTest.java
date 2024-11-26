@@ -42,6 +42,7 @@ public class UserServiceTest {
 
         // 정상적인 로그인 시도
         UserLoginResponseDto loggedInUser = userService.loginUser("google", "1234", "test@test.com");
+        assertThat(loggedInUser.getUserInfo().getEmail()).isEqualTo(user.getEmail());
         log.info("로그인 성공 : {}", loggedInUser.getUserInfo());
     }
 

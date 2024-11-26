@@ -45,6 +45,6 @@ public class User {
     private LocalDateTime deletedAt;
 
     // 나중에 암호화 해야함.
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 }

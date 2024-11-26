@@ -30,6 +30,7 @@ public class AuthController {
     @GetMapping("/login/google")
     public String googleLogin() throws IOException {
         // TODO : 서비스로 코드 옮기기
+        log.info("구글 로그인 URL 요청");
         String redirectUrl = "https://accounts.google.com/o/oauth2/v2/auth"
                 + "?scope=profile%20email"
                 + "&access_type=offline"
@@ -48,7 +49,7 @@ public class AuthController {
     public ResponseEntity<UserResponseDto> googleCallback(@RequestParam("code") String authCode) throws IOException {
 
         // 요청 로그 확인
-        log.info("요청: Auth code received: " + authCode);
+        log.info("Auth Ccod 요청 : " + authCode);
 
         return ResponseEntity.ok(authService.handleGoogleCallback(authCode));
     }
