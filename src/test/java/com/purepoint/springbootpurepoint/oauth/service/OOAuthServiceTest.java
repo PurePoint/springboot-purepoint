@@ -1,4 +1,4 @@
-package com.purepoint.springbootpurepoint.auth.service;
+package com.purepoint.springbootpurepoint.oauth.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Slf4j
-public class AuthServiceTest {
+public class OOAuthServiceTest {
 
     @Autowired
-    private AuthService authService;
+    private OAuthService authService;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
