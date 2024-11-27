@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  maria-db:
+  maria-db-main:
     image: mariadb:10.9
     environment:
       MYSQL_ROOT_PASSWORD: root
