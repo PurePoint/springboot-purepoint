@@ -1,5 +1,6 @@
 package com.purepoint.springbootpurepoint.user.repository;
 
+import com.purepoint.springbootpurepoint.community.mapper.CommunityMapper;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import io.micrometer.observation.ObservationFilter;
@@ -11,6 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
-    Optional<User> findByProviderNameAndProviderIdAndEmail(String providerName, String providerId, String email);
+
     Optional<User> findByEmail(String email);
 }

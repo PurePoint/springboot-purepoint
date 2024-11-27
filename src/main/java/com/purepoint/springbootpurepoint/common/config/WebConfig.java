@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     // `PathMatchConfigurer`를 사용해 모든 요청 경로에 "api/v1" 프리픽스를 추가합니다
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix("api/v1", c -> true);
+        configurer.addPathPrefix("/api/v1", c -> true);
     }
 
 }

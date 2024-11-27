@@ -7,6 +7,7 @@ import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import com.purepoint.springbootpurepoint.user.exception.UserNotFoundException;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
+import com.purepoint.springbootpurepoint.user.mapper.UserMapper;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,48 +17,41 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-// TODO 아이디를 통해 사용자 검색 중복 로직 재사용 처리
-// TODO MapStruct 코드로 변경
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper = UserMapper.INSTANCE;
 
     @Override
     public UserLoginResponseDto loginUser(String providerName, String providerId, String email) {
 
-        log.info("로그인 요청 들어옴 : {}", providerName + " : " + providerId + " : " + email);
-        // 프로바이더와 providerName, providerId, email가 모두 일치하는 사용자가 있는지 확인
+        log.info("로그인 요청 들어옴: providerName={}, providerId={}, email={}", providerName, providerId, email);
+
         try {
-            Optional<User> userOptional = userRepository.findByEmail(email);
-
-            // 유저 정보가 있는 경우
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                UserDto userDto = UserDto.builder()
-                        .userId(user.getUserId())
-                        .nickname(user.getNickname())
-                        .email(user.getEmail())
-                        .build();
-
-                return UserLoginResponseDto.builder()
-                        .userInfo(userDto)
-                        .userStatus(UserStatus.ACTIVE)
-                        .build();
-            } else {
-                // 유저 정보가 없는 경우 신규 유저라는 표시
-                return UserLoginResponseDto.builder()
-                        .userInfo(null)
-                        .userStatus(UserStatus.NEW)
-                        .build();
-            }
+            return userRepository.findByEmail(email)
+                    .map(user -> {
+                        log.info("기존 유저 로그인 확인 : email={}", user.getEmail());
+                        UserDto userDto = userMapper.toUserDto(user);
+                        return createUserLoginResponse(userDto, UserStatus.ACTIVE);
+                    })
+                    .orElseGet(() -> {
+                        log.info("신규 유저임: email={}", email);
+                        return createUserLoginResponse(null, UserStatus.NEW);
+                    });
         } catch (Exception e) {
             log.error("로그인 중 예외 발생: ", e);
-            throw new RuntimeException("로그인 중 문제가 발생했습니다.");
+            throw new RuntimeException("로그인 중 문제가 발생했습니다.", e);
         }
+    }
+
+    private UserLoginResponseDto createUserLoginResponse(UserDto userDto, UserStatus status) {
+        return UserLoginResponseDto.builder()
+                .userInfo(userDto)
+                .userStatus(status)
+                .build();
     }
 
     @Override
@@ -65,45 +59,23 @@ public class UserServiceImpl implements UserService {
 
         log.info("소셜 아이디 생성 시작!");
 
-        User createUser = User.builder()
-                .nickname(userDto.getNickname())
-                .email(userDto.getEmail())
-                .profileImage(userDto.getProfileImage())
-                .providerId(userDto.getProviderId())
-                .providerName(userDto.getProviderName())
-                .build();
+        User createUser = userMapper.toUser(userDto);
 
         User userEntity = userRepository.save(createUser);
 
-        UserDto dto = UserDto.builder()
-                .userId(userEntity.getUserId())
-                .email(userEntity.getEmail())
-                .nickname(userEntity.getNickname())
-                .profileImage(userEntity.getProfileImage())
-                .build();
-
-        return dto;
+        return userMapper.toUserDto(userEntity);
     }
 
     @Override
     public UserDto createUser(UserCreateRequestDto userDto) {
-        // TODO 시용자가 이미 존재하는지 검증
 
-        // 사용자 정보가 들어오면, 해당 정보를 가지고 회원가입
-        User createUser = User.builder()
-                .nickname(userDto.getNickname())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword())
-                .build();
+        log.info("유저 정보 들어옴 {}", userDto.toString() );
+
+        User createUser = userMapper.toUser(userDto);
 
         User savedUser = userRepository.save(createUser);
 
-        // 유저 정보 반환
-        return UserDto.builder()
-                .userId(savedUser.getUserId())
-                .nickname(savedUser.getNickname())
-                .email(savedUser.getEmail())
-                .build();
+        return userMapper.toUserDto(savedUser);
     }
 
     @Override
@@ -112,16 +84,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-        // 프로필 URL 변경
         user.setProfileImage(profileImageUrl);
+
         userRepository.save(user);
 
-        // 유저 정보 반환
-        return UserDto.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
+        return userMapper.toUserDto(user);
     }
 
     @Override
@@ -134,11 +101,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         // 유저 정보 반환
-        return UserDto.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
+        return userMapper.toUserDto(user);
     }
 
     @Override
@@ -147,12 +110,16 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-        // 유저 정보 반환
-        return UserDto.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
+        return userMapper.toUserDto(user);
+    }
+
+    @Override
+    public UserDto getUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+
+        return userMapper.toUserDto(user);
     }
 
     @Override
@@ -162,10 +129,5 @@ public class UserServiceImpl implements UserService {
             user.setDeletedAt(LocalDateTime.now());
             userRepository.save(user);
         });
-    }
-
-    @Override
-    public UserDto findOrCreateUser(String userId, String email, String name) {
-        return null;
     }
 }

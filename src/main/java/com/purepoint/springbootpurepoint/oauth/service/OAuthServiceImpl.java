@@ -1,17 +1,16 @@
-package com.purepoint.springbootpurepoint.auth.service;
+package com.purepoint.springbootpurepoint.oauth.service;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.purepoint.springbootpurepoint.auth.dto.response.UserResponseDto;
-import com.purepoint.springbootpurepoint.auth.jwt.JwtTokenProvider;
-import com.purepoint.springbootpurepoint.user.domain.User;
+import com.purepoint.springbootpurepoint.oauth.dto.response.OAuthResponseDto;
+import com.purepoint.springbootpurepoint.common.jwt.JwtTokenProvider;
+import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
-import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateSocialRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
-import com.purepoint.springbootpurepoint.user.repository.UserRepository;
+import com.purepoint.springbootpurepoint.user.mapper.UserMapper;
 import com.purepoint.springbootpurepoint.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +28,10 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthServiceImpl implements AuthService {
+public class OAuthServiceImpl implements OAuthService {
 
     private final UserService userService;
+    private final UserMapper userMapper = UserMapper.INSTANCE;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -44,7 +44,19 @@ public class AuthServiceImpl implements AuthService {
     private String googleRedirectUri;
 
     @Override
-    public UserResponseDto handleGoogleCallback(String authCode) {
+    public String getGoogleOAuth2Url() {
+        return "https://accounts.google.com/o/oauth2/v2/auth"
+                + "?scope=profile%20email"
+                + "&access_type=offline"
+                + "&include_granted_scopes=true"
+                + "&response_type=code"
+                + "&state=state_parameter_passthrough_value"
+                + "&redirect_uri=" + "http://localhost:3000/redirect"
+                + "&client_id=" + "69356984572-fhmvvd12bdhvaq33peiu1t0jl2vvmob1.apps.googleusercontent.com";
+    }
+
+    @Override
+    public OAuthResponseDto handleGoogleCallback(String authCode) {
         try {
             // 받은 인증 코드를 통해 구글 OAuth (엑세스, 리프레시)토큰으로 교환
             log.info("구글 OAuth (엑세스, 리프레시)토큰으로 교환");
@@ -71,11 +83,8 @@ public class AuthServiceImpl implements AuthService {
                         .providerId(userInfo.get("sub").toString())
                         .profileImage(userInfo.get("picture").toString())
                         .build();
-                log.info("생성된 유저 저장 {}",createUser.toString());
 
                 userService.createSocialUser(createUser);
-
-                log.info("유저 정상적으로 생성 됬는지 확인 ");
 
                 // 사용자 로그인
                 log.info("사용자 로그인 시도 : {}", userInfo.get("email").toString());
@@ -86,25 +95,33 @@ public class AuthServiceImpl implements AuthService {
                 String jwtToken = jwtTokenProvider.createToken(newUser.getUserInfo(), "user");
 
                 log.info("인증 토큰 {}", jwtToken);
-                return UserResponseDto.builder()
-                        .Token(jwtToken)
-                        .RefreshToken(tokenData.get("refreshToken").toString())
+                return OAuthResponseDto.builder()
+                        .accessToken(jwtToken)
+                        .refreshToken(null)
                         .loginStatus(UserStatus.ACTIVE)
                         .build();
 
             } else {
                 // 사용자 정보로 애플리케이션의 인증 토큰을 생성합니다.
+                log.info("사용자 인증 토큰 생성");
                 String jwtToken = jwtTokenProvider.createToken(loginUser.getUserInfo(), "user");
 
-                return UserResponseDto.builder()
-                        .Token(jwtToken)
-                        .RefreshToken(tokenData.get("refreshToken").toString())
+                log.info("인증 토큰 {}", jwtToken);
+                return OAuthResponseDto.builder()
+                        .accessToken(jwtToken)
+                        .refreshToken(null)
                         .loginStatus(UserStatus.ACTIVE)
                         .build();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // 퓨어포인트 로그인
+    @Override
+    public UserDto purePointLogin(String accessToken) {
+        return userService.getUserById(jwtTokenProvider.getUserIdFromToken(accessToken));
     }
 
     private Map<String, Object> getOauthToken(String authCode) throws IOException {
@@ -149,4 +166,6 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Failed to fetch user info");
         }
     }
+
+
 }

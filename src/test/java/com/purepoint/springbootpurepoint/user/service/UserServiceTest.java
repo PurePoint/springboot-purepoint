@@ -8,6 +8,7 @@ import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -59,6 +60,19 @@ public class UserServiceTest {
             log.info("신규 유저 로그인 테스트 중 에러가 발생하였습니다.");
         }
 
+    }
+    
+    @Test
+    public void 사용자_유저아이디_조회() {
+        try {
+            UserDto user = userService.getUserById(UUID.fromString("cc246400-e65c-49bd-b661-23dba7e4b7b9"));
+            log.info("유저 정보 : {}", user.toString());
+            log.info("유저 이메일 : {}", user.getEmail());
+
+            assertThat(user.getEmail()).isEqualTo("qkrwjdgus0603@gmail.com");
+        } catch (NoSuchElementException e) {
+            log.info("유저를 찾을 수 없습니다.");
+        }
     }
 
     // 테스트할 목업 데이터
