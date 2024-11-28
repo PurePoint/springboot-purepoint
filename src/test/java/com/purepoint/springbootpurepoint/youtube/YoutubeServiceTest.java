@@ -2,6 +2,10 @@ package com.purepoint.springbootpurepoint.youtube;
 
 import com.purepoint.springbootpurepoint.youtube.dto.YoutubeDto;
 import com.purepoint.springbootpurepoint.youtube.service.YouTubeServiceImpl;
+import com.purepoint.springbootpurepoint.user.repository.UserRepository;
+import com.purepoint.springbootpurepoint.youtube.dto.VideoDto;
+import com.purepoint.springbootpurepoint.youtube.repository.VideoLikeRepository;
+import com.purepoint.springbootpurepoint.youtube.service.VideoServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,12 +20,18 @@ public class YoutubeServiceTest {
 
     @Autowired
     private YouTubeServiceImpl youtubeService;
+    private VideoServiceImpl videoService;
+    @Autowired
+    private VideoLikeRepository videoLikeRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     @DisplayName("유튜브 영상 데이터 조회 서비스 테스트")
     public void getYoutubeVideoTest() {
 
         List<YoutubeDto> results = youtubeService.getYoutubeVideo();
+        List<VideoDto> results = videoService.getYoutubeVideo();
 
         for(int i=0; i<results.size(); i++){
             log.info("유튜브 영상 ID: " + results.get(i).getVideoId());
@@ -30,5 +40,11 @@ public class YoutubeServiceTest {
             log.info("유튜브 영상 게시시간: " + results.get(i).getVideoPublishedAt());
             log.info("유튜브 영상 썸네일: " + results.get(i).getVideoThumbnail());
         }
+    }
+
+    @Test
+    @DisplayName("좋아요 수 업데이트 테스트")
+    public void getYoutubeVideoLikesTest() {
+
     }
 }

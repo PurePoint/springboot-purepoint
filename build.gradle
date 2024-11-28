@@ -36,6 +36,7 @@ dependencyManagement {
 
 dependencies {
     // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -55,6 +56,10 @@ dependencies {
 
     // Database
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Lettuce
+    implementation 'io.lettuce:lettuce-core:6.5.0.RELEASE'
 
     // Google-Client
     implementation 'com.google.api-client:google-api-client:1.25.0'
@@ -78,6 +83,9 @@ dependencies {
 
     // AWS Secret Manager
     implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4' // 취약성 존재하지만 수정버전이 아직 안나왔음
+
+
+
 
 }
 
