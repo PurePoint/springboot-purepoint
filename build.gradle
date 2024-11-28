@@ -36,13 +36,16 @@ dependencyManagement {
 
 dependencies {
     // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
     // Database
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -68,9 +71,14 @@ dependencies {
     // Mapstruct
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
     
     // AWS Secret Manager
     implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
+
+    // Lettuce
+    implementation 'io.lettuce:lettuce-core:6.5.0.RELEASE'
+
 
 }
 

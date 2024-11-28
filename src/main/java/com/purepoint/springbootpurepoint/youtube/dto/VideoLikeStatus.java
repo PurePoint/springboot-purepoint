@@ -1,4 +1,5 @@
 package com.purepoint.springbootpurepoint.youtube.dto;
 
-public class YoutubeDto {
+public enum VideoLikeStatus {
+    LIKE, UNLIKE
 }
