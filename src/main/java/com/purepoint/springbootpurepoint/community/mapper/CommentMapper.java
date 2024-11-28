@@ -1,21 +1,20 @@
 package com.purepoint.springbootpurepoint.community.mapper;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
-import com.purepoint.springbootpurepoint.community.dto.CommCommentResDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
 
 @Mapper
 public interface CommentMapper {
 
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    @Mapping(source = "user.nickname", target = "nickname")
-    @Mapping(source = "user.profileImage", target = "profileImage")
-    CommCommentResDto toDto(Comment comment);  // Comment 하나를 변환하는 메서드
+    @Mapping(target = "commentId", ignore = true)
+    @Mapping(source = "userId", target = "user.userId")
+    @Mapping(source = "postId", target = "community.postId")
+    Comment createPostToEntity(CommCreateCommentReqDto commCreateCommentReqDto);
 
-    List<CommCommentResDto> toDto(List<Comment> comment);  // List<Comment>를 List<CommCommentResDto>로 변환하는 메서드
 }
