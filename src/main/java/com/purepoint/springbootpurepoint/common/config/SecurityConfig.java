@@ -29,10 +29,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
+                                .requestMatchers("/**").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/youtube/video/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(withDefaults())
+                //.formLogin(withDefaults())
                 .logout(withDefaults())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

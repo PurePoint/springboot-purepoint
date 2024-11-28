@@ -13,5 +13,15 @@ services:
     volumes:
       - mariadb-data:/var/lib/mysql
 
+  redis:
+    image: redis:7.4.1
+    container_name: springboot-purepoint-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
 volumes:
   mariadb-data:
+  redis-data:
