@@ -56,6 +56,14 @@ dependencies {
     // Database
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
+    // Google-Client
+    implementation 'com.google.api-client:google-api-client:1.25.0'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
@@ -70,6 +78,7 @@ dependencies {
 
     // AWS Secret Manager
     implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4' // 취약성 존재하지만 수정버전이 아직 안나왔음
+
 }
 
 tasks.named('test') {
