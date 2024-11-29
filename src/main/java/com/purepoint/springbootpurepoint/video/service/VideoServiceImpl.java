@@ -28,8 +28,12 @@ public class VideoServiceImpl implements VideoService {
     private final VideoLikeMapper videoLikeMapper = VideoLikeMapper.INSTANCE;
 
     // 유튜브 영상 리스트 가져오는 로직
-    public List<VideoDto> getYoutubeVideo() {
-        List<Video> videos = videoRepository.findAll();
+    public List<VideoDto> getYoutubeVideo(String category) {
+        List<Video> videos;
+
+        if(category == null || category.equals("all")) { videos = videoRepository.findAll(); }
+        else {videos = videoRepository.findByVideoTitleContaining(category); }
+
         List<Long> videoLikes = videos.stream()
                 .map(video -> (long) videoLikeRepository.findAllByVideoId(video.getVideoId()).size())
                 .collect(Collectors.toList());

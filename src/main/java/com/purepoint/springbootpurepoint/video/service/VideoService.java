@@ -10,7 +10,7 @@ public interface VideoService {
     /**
      * @return 유튜브 영상 데이터 리턴
      */
-    List<VideoDto> getYoutubeVideo();
+    List<VideoDto> getYoutubeVideo(String category);
 
     List<VideoDto> searchYoutubeVideo(String query);
 

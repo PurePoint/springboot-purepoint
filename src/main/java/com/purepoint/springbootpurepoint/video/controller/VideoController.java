@@ -26,8 +26,8 @@ public class VideoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 영상 조회")})
     @GetMapping("/")
-    public ResponseEntity<List<VideoDto>> getVideo() {
-        return ResponseEntity.ok(videoService.getYoutubeVideo());
+    public ResponseEntity<List<VideoDto>> getVideo(String category) {
+        return ResponseEntity.ok(videoService.getYoutubeVideo(category));
     }
 
     @Operation(summary = "유튜브 영상 좋아요 수를 업데이트합니다.")
