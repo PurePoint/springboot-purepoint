@@ -1,4 +1,4 @@
-package com.purepoint.springbootpurepoint.youtube.dto;
+package com.purepoint.springbootpurepoint.video.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

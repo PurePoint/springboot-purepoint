@@ -1,7 +1,7 @@
-package com.purepoint.springbootpurepoint.youtube.mapper;
+package com.purepoint.springbootpurepoint.video.mapper;
 
-import com.purepoint.springbootpurepoint.youtube.domain.VideoLike;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.video.domain.VideoLike;
+import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusReqDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

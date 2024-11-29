@@ -1,6 +1,6 @@
-package com.purepoint.springbootpurepoint.youtube.repository;
+package com.purepoint.springbootpurepoint.video.repository;
 
-import com.purepoint.springbootpurepoint.youtube.domain.VideoLike;
+import com.purepoint.springbootpurepoint.video.domain.VideoLike;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

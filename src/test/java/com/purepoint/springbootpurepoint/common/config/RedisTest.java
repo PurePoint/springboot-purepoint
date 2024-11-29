@@ -1,10 +1,7 @@
 package com.purepoint.springbootpurepoint.config;
 
-import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
-import com.purepoint.springbootpurepoint.youtube.domain.Video;
-import com.purepoint.springbootpurepoint.youtube.domain.VideoLike;
-import com.purepoint.springbootpurepoint.youtube.repository.VideoLikeRepository;
+import com.purepoint.springbootpurepoint.video.repository.VideoLikeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

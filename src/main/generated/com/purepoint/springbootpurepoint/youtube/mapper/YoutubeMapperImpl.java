@@ -1,7 +1,7 @@
-package com.purepoint.springbootpurepoint.youtube.mapper;
+package com.purepoint.springbootpurepoint.video.mapper;
 
-import com.purepoint.springbootpurepoint.youtube.domain.Youtube;
-import com.purepoint.springbootpurepoint.youtube.dto.YoutubeDto;
+import com.purepoint.springbootpurepoint.video.domain.Youtube;
+import com.purepoint.springbootpurepoint.video.dto.YoutubeDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;

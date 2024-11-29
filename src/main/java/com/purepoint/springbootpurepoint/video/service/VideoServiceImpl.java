@@ -1,16 +1,16 @@
-package com.purepoint.springbootpurepoint.youtube.service;
+package com.purepoint.springbootpurepoint.video.service;
 
-import com.purepoint.springbootpurepoint.youtube.domain.Video;
+import com.purepoint.springbootpurepoint.video.domain.Video;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
-import com.purepoint.springbootpurepoint.youtube.domain.VideoLike;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoDto;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoLikeStatus;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.youtube.mapper.VideoLikeMapper;
-import com.purepoint.springbootpurepoint.youtube.mapper.VideoMapper;
-import com.purepoint.springbootpurepoint.youtube.repository.VideoLikeRepository;
-import com.purepoint.springbootpurepoint.youtube.repository.VideoRepository;
+import com.purepoint.springbootpurepoint.video.domain.VideoLike;
+import com.purepoint.springbootpurepoint.video.dto.VideoDto;
+import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatus;
+import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.video.mapper.VideoLikeMapper;
+import com.purepoint.springbootpurepoint.video.mapper.VideoMapper;
+import com.purepoint.springbootpurepoint.video.repository.VideoLikeRepository;
+import com.purepoint.springbootpurepoint.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +35,20 @@ public class VideoServiceImpl implements VideoService {
                 .collect(Collectors.toList());
 
         return videoMapper.toDtoWithLikes(videos, videoLikes);
+    }
+
+    @Override
+    public List<VideoDto> searchYoutubeVideo(String query) {
+        List<Video> videos = videoRepository.findByVideoTitleContaining(query);
+
+
+//        return videos.stream()
+//                .map(video -> videoMapper.toDto(video))
+//                .collect(Collectors.toList());
+
+        return videos.stream()
+                .map(videoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 

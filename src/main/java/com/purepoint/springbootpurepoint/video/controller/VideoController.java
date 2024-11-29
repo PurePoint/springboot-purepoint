@@ -1,9 +1,9 @@
-package com.purepoint.springbootpurepoint.youtube.controller;
+package com.purepoint.springbootpurepoint.video.controller;
 
-import com.purepoint.springbootpurepoint.youtube.domain.VideoLike;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoDto;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.youtube.service.VideoService;
+import com.purepoint.springbootpurepoint.video.domain.VideoLike;
+import com.purepoint.springbootpurepoint.video.dto.VideoDto;
+import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.video.service.VideoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

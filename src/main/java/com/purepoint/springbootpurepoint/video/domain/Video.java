@@ -1,9 +1,7 @@
-package com.purepoint.springbootpurepoint.youtube.domain;
+package com.purepoint.springbootpurepoint.video.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "video")
