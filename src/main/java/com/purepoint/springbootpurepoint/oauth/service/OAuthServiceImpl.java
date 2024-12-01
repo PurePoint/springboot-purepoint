@@ -51,8 +51,8 @@ public class OAuthServiceImpl implements OAuthService {
                 + "&include_granted_scopes=true"
                 + "&response_type=code"
                 + "&state=state_parameter_passthrough_value"
-                + "&redirect_uri=" + "http://localhost:3000/redirect"
-                + "&client_id=" + "69356984572-fhmvvd12bdhvaq33peiu1t0jl2vvmob1.apps.googleusercontent.com";
+                + "&redirect_uri=" + googleRedirectUri
+                + "&client_id=" + googleClientId;
     }
 
     @Override
