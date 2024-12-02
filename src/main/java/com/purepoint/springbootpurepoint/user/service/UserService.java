@@ -27,5 +27,4 @@ public interface UserService{
     UserDto updateUserNickname(UUID userId, String nickname);
 
     void deleteUser(UUID userId);
-
 }

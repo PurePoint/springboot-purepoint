@@ -1,9 +1,9 @@
-package com.purepoint.springbootpurepoint.youtube.controller;
+package com.purepoint.springbootpurepoint.video.controller;
 
-import com.purepoint.springbootpurepoint.youtube.domain.VideoLike;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoDto;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.youtube.service.VideoService;
+import com.purepoint.springbootpurepoint.video.domain.VideoLike;
+import com.purepoint.springbootpurepoint.video.dto.VideoDto;
+import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.video.service.VideoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,8 +26,8 @@ public class VideoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 영상 조회")})
     @GetMapping("/")
-    public ResponseEntity<List<VideoDto>> getVideo() {
-        return ResponseEntity.ok(videoService.getYoutubeVideo());
+    public ResponseEntity<List<VideoDto>> getVideo(String category) {
+        return ResponseEntity.ok(videoService.getYoutubeVideo(category));
     }
 
     @Operation(summary = "유튜브 영상 좋아요 수를 업데이트합니다.")

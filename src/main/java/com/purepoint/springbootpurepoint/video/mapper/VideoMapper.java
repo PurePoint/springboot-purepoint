@@ -1,8 +1,8 @@
-package com.purepoint.springbootpurepoint.youtube.mapper;
+package com.purepoint.springbootpurepoint.video.mapper;
 
-import com.purepoint.springbootpurepoint.youtube.domain.Video;
-import com.purepoint.springbootpurepoint.youtube.dto.VideoDto;
-import com.purepoint.springbootpurepoint.youtube.repository.VideoLikeRepository;
+import com.purepoint.springbootpurepoint.video.domain.Video;
+import com.purepoint.springbootpurepoint.video.dto.VideoDto;
+import com.purepoint.springbootpurepoint.video.repository.VideoLikeRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;

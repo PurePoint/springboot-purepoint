@@ -1,4 +1,4 @@
-package com.purepoint.springbootpurepoint.youtube.domain;
+package com.purepoint.springbootpurepoint.video.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
