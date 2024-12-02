@@ -33,7 +33,7 @@ public class VideoServiceImpl implements VideoService {
     public List<VideoDto> getYoutubeVideo() {
         List<Video> videos = videoRepository.findAll();
         List<Long> videoLikes = videos.stream()
-                .map(video -> getVideoLikeCount(video.getVideoId()))
+                .map(video -> videoMapper.getVideoLikeCount(video.getVideoId()))
                 .collect(Collectors.toList());
 
         return videoMapper.toDtoWithLikes(videos, videoLikes);
@@ -70,12 +70,6 @@ public class VideoServiceImpl implements VideoService {
         }
 
         return videoLike;
-    }
-
-    public Long getVideoLikeCount(String videoId) {
-        String redisKey = "video:" + videoId + ":likes";
-        String count = redisTemplate.opsForValue().get(redisKey);
-        return count != null ? Long.parseLong(count) : 0L;
     }
 
 }
