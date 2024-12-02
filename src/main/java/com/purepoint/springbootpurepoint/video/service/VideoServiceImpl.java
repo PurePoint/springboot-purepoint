@@ -12,6 +12,7 @@ import com.purepoint.springbootpurepoint.video.mapper.VideoMapper;
 import com.purepoint.springbootpurepoint.video.repository.VideoLikeRepository;
 import com.purepoint.springbootpurepoint.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public class VideoServiceImpl implements VideoService {
     private final UserRepository userRepository;
     private final VideoLikeRepository videoLikeRepository;
     private final VideoLikeMapper videoLikeMapper = VideoLikeMapper.INSTANCE;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     // 유튜브 영상 리스트 가져오는 로직
     public List<VideoDto> getYoutubeVideo(String category) {
@@ -45,12 +48,24 @@ public class VideoServiceImpl implements VideoService {
     public List<VideoDto> searchYoutubeVideo(String query) {
         List<Video> videos = videoRepository.findByVideoTitleContaining(query);
 
+        // 각 영상의 좋아요 수를 Redis에서 검색하여 정렬
+        List<Video> sortedVideos = videos.stream()
+                .sorted((v1, v2) -> {
+                    Long likes1 = (Long) redisTemplate.opsForValue().get("video:likes:" + v1.getVideoId());
+                    Long likes2 = (Long) redisTemplate.opsForValue().get("video:likes:" + v2.getVideoId());
+                    likes1 = (likes1 == null) ? 0 : likes1;
+                    likes2 = (likes2 == null) ? 0 : likes2;
+                    return likes2.compareTo(likes1);
+                })
+                .limit(5) // 상위 5개 영상 선택
+                .toList();
+
 
 //        return videos.stream()
 //                .map(video -> videoMapper.toDto(video))
 //                .collect(Collectors.toList());
 
-        return videos.stream()
+        return sortedVideos.stream()
                 .map(videoMapper::toDto)
                 .collect(Collectors.toList());
     }
