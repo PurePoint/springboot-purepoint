@@ -1,5 +1,6 @@
 package com.purepoint.springbootpurepoint.search.controller;
 
+import com.purepoint.springbootpurepoint.playlist.dto.PlaylistDto;
 import com.purepoint.springbootpurepoint.search.service.SearchService;
 import com.purepoint.springbootpurepoint.video.dto.VideoDto;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,14 @@ public class SearchController {
         this.searchService = searchService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<VideoDto>> search(@RequestParam("query") String query) {
+    @GetMapping("/videos")
+    public ResponseEntity<List<VideoDto>> searchVideo(@RequestParam("query") String query) {
         return searchService.searchVideo(query) != null ? ResponseEntity.ok(searchService.searchVideo(query)) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/playlists")
+    public ResponseEntity<List<PlaylistDto>> search(@RequestParam("query") String query) {
+        return searchService.searchPlaylist(query) != null ? ResponseEntity.ok(searchService.searchPlaylist(query)) : ResponseEntity.notFound().build();
     }
 
 }

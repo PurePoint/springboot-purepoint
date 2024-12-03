@@ -1,5 +1,6 @@
 package com.purepoint.springbootpurepoint.search.service;
 
+import com.purepoint.springbootpurepoint.playlist.dto.PlaylistDto;
 import com.purepoint.springbootpurepoint.video.dto.VideoDto;
 
 import java.util.List;
@@ -11,5 +12,7 @@ public interface SearchService {
         // En = java
 
     List<VideoDto> searchVideo(String query);
+
+    List<PlaylistDto> searchPlaylist(String query);
 
 }
