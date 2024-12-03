@@ -6,6 +6,7 @@ import com.purepoint.springbootpurepoint.video.repository.VideoLikeRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public abstract class VideoMapper {
 
     @Autowired
-    protected VideoLikeRepository videoLikeRepository;
+    protected RedisTemplate<String, String> redisTemplate;
 
     @Mapping(target = "videoLikes", ignore = true)
     public abstract VideoDto toDto(Video video);
@@ -34,7 +35,13 @@ public abstract class VideoMapper {
 
     public List<VideoDto> toDtoWithLikes(List<Video> videos, List<Long> videoLikes) {
         return videos.stream()
-                .map(video -> toDtoWithLikes(video, (long) videoLikeRepository.findAllByVideoId(video.getVideoId()).size()))
+                .map(video -> toDtoWithLikes(video, getVideoLikeCount(video.getVideoId())))
                 .collect(Collectors.toList());
+    }
+
+    public Long getVideoLikeCount(String videoId) {
+        String redisKey = "video:" + videoId + ":likes";
+        String count = redisTemplate.opsForValue().get(redisKey);
+        return count != null ? Long.parseLong(count) : 0L;
     }
 }
