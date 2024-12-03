@@ -27,8 +27,6 @@ public class VideoServiceImpl implements VideoService {
     private final UserRepository userRepository;
     private final VideoLikeRepository videoLikeRepository;
     private final VideoLikeMapper videoLikeMapper = VideoLikeMapper.INSTANCE;
-    private final RedisTemplate<String, String> redisTemplate;
-
     private final RedisTemplate<String, Object> redisTemplate;
 
     // 유튜브 영상 리스트 가져오는 로직
