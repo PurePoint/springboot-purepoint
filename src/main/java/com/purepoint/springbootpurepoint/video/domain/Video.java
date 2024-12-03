@@ -3,6 +3,8 @@ package com.purepoint.springbootpurepoint.video.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "video")
 @Getter
@@ -26,7 +28,7 @@ public class Video {
     private String videoDescription;
 
     @Column(name = "video_published_at")
-    private String videoPublishedAt;
+    private LocalDateTime videoPublishedAt;
 
     @Column(name = "video_thumbnail")
     private String videoThumbnail;

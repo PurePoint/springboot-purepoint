@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 public class VideoDto {
@@ -17,8 +19,8 @@ public class VideoDto {
     @Schema(description = "유튜브 영상 설명", example = "Java 강의입니다.")
     private String videoDescription;
 
-    @Schema(description = "유튜브 영상 게시시간", example = "2023-05-07T06:23:47Z")
-    private String videoPublishedAt;
+    @Schema(description = "유튜브 영상 게시시간", example = "2024-02-29 04:12:22.000000")
+    private LocalDateTime videoPublishedAt;
 
     @Schema(description = "유튜브 영상 썸네일", example = "https://i.ytimg.com/vi/7TtIEAx2FYg/default.jpg")
     private String videoThumbnail;

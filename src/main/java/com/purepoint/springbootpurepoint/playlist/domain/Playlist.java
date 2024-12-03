@@ -1,4 +1,4 @@
-package com.purepoint.springbootpurepoint.video.domain;
+package com.purepoint.springbootpurepoint.playlist.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
