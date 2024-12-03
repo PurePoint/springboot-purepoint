@@ -4,9 +4,7 @@ import com.purepoint.springbootpurepoint.video.domain.Video;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import com.purepoint.springbootpurepoint.video.domain.VideoLike;
-import com.purepoint.springbootpurepoint.video.dto.VideoDto;
-import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatus;
-import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.video.dto.*;
 import com.purepoint.springbootpurepoint.video.mapper.VideoLikeMapper;
 import com.purepoint.springbootpurepoint.video.mapper.VideoMapper;
 import com.purepoint.springbootpurepoint.video.repository.VideoLikeRepository;
@@ -43,6 +41,7 @@ public class VideoServiceImpl implements VideoService {
         return videoMapper.toDtoWithLikes(videos, videoLikes);
     }
 
+    // 유튜브 영상을 검색하는 로직
     @Override
     public List<VideoDto> searchYoutubeVideo(String query) {
         List<Video> videos = videoRepository.findByVideoTitleContaining(query);
@@ -69,12 +68,36 @@ public class VideoServiceImpl implements VideoService {
                 .collect(Collectors.toList());
     }
 
-
-    public VideoLike updateVideoLike(VideoLikeStatusReqDto videoLikeStatusReqDto) {
+    // 영상에 대한 좋아요 상태를 조회하는 로직
+    public VideoLikeStatusResDto getVideoLikeStatus(VideoLikeStatusReqDto videoLikeStatusReqDto) {
         User user = userRepository.findById(videoLikeStatusReqDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Video video = videoRepository.findById(videoLikeStatusReqDto.getVideoId())
+                .orElseThrow(() -> new RuntimeException("Video not found"));
+
+        VideoLike videoLike = null;
+        VideoLikeStatusResDto videoLikeStatusResDto;
+
+        if(user != null && video != null) {
+            videoLike = videoLikeRepository.findByVideoIdAndUserId(video.getVideoId(), user.getUserId());
+        }
+
+        if(videoLike != null) {
+            videoLikeStatusResDto = videoLikeMapper.toDto(videoLike);
+        } else {
+            return null;
+        }
+
+        return videoLikeStatusResDto;
+    }
+
+    // 좋아요 수를 업데이트하는 로직
+    public VideoLike updateVideoLike(UpdateVideoLikeStatusReqDto updateVideoLikeStatusReqDto) {
+        User user = userRepository.findById(updateVideoLikeStatusReqDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Video video = videoRepository.findById(updateVideoLikeStatusReqDto.getVideoId())
                 .orElseThrow(() -> new RuntimeException("Video not found"));
 
         VideoLike videoLike = null;
@@ -88,13 +111,13 @@ public class VideoServiceImpl implements VideoService {
         }
 
         // videoLike가 없고, 좋아요 상태가 true 요청이 오면 videoLike 저장
-        if(videoLike == null && videoLikeStatusReqDto.getVideoLikeStatus() == VideoLikeStatus.LIKE) {
-            videoLikeRepository.save(videoLikeMapper.toEntity(videoLikeStatusReqDto));
+        if(videoLike == null && updateVideoLikeStatusReqDto.getVideoLikeStatus() == VideoLikeStatus.LIKE) {
+            videoLikeRepository.save(videoLikeMapper.toEntity(updateVideoLikeStatusReqDto));
             redisTemplate.opsForValue().increment(redisKey);
         }
 
         // videoLike가 있고, 좋아요 상태가 false 요청이 오면 videoLike 삭제
-        else if(videoLike != null && videoLikeStatusReqDto.getVideoLikeStatus() == VideoLikeStatus.UNLIKE) {
+        else if(videoLike != null && updateVideoLikeStatusReqDto.getVideoLikeStatus() == VideoLikeStatus.UNLIKE) {
             videoLikeRepository.deleteById(videoLike.getId());
             redisTemplate.opsForValue().decrement(redisKey);
         }
