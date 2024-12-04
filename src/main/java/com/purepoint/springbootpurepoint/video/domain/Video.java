@@ -1,5 +1,6 @@
 package com.purepoint.springbootpurepoint.video.domain;
 
+import com.purepoint.springbootpurepoint.playlist.domain.Playlist;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,8 +44,8 @@ public class Video {
     private String playlistId;
 
 
-//    // `Playlist`와의 연관 관계 매핑
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "playlist_id", insertable = false, updatable = false) // `playlistId` 필드 사용
-//    private Playlist playlist;
+    // `Playlist`와의 연관 관계 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_id", insertable = false, updatable = false)
+    private Playlist playlist;
 }

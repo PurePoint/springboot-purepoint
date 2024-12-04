@@ -27,4 +27,10 @@ public class PlaylistDto {
 
     @Schema(description = "유튜브 playlist 좋아요 수", example = "1")
     private Long playlistLikes;
+
+    @Schema(description = "유튜브 playlist 채널 Id", example = "UCenbLmVazutdwQrVXUFVlNg")
+    private String channelId;
+
+    @Schema(description = "유튜브 playlist 채널 타이틀", example = "코딩문")
+    private String channelTitle;
 }

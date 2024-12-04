@@ -4,6 +4,10 @@ import com.purepoint.springbootpurepoint.playlist.domain.Playlist;
 import com.purepoint.springbootpurepoint.playlist.dto.PlaylistDto;
 import com.purepoint.springbootpurepoint.playlist.mapper.PlaylistMapper;
 import com.purepoint.springbootpurepoint.playlist.repository.PlaylistRepository;
+import com.purepoint.springbootpurepoint.video.domain.Video;
+import com.purepoint.springbootpurepoint.video.dto.VideoDto;
+import com.purepoint.springbootpurepoint.video.mapper.VideoMapper;
+import com.purepoint.springbootpurepoint.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,8 +22,11 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final PlaylistMapper playlistMapper;
+    private final VideoRepository videoRepository;
+    private final VideoMapper videoMapper;
 
 
+    // 유튜브 playlist 검색
     @Override
     public List<PlaylistDto> searchYoutubePlaylist(String query) {
         List<Playlist> playlists = playlistRepository.findByPlaylistTitleContaining(query);
@@ -40,4 +47,18 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .map(playlistMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    // 각 playlist의 영상 조회
+    @Override
+    public List<VideoDto> getPlaylistVideos(String playlistId) {
+        List<Video> playlistVideos = videoRepository.findByPlaylistIdOrderByVideoPositionAsc(playlistId);
+
+        List<Long> videoLikes = playlistVideos.stream()
+                .map(video -> videoMapper.getVideoLikeCount(video.getVideoId()))
+                .toList();
+
+        return videoMapper.toDtoWithLikes(playlistVideos, videoLikes);
+    }
+
+
 }
