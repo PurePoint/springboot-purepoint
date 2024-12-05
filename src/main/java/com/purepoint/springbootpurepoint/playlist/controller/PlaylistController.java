@@ -1,5 +1,9 @@
 package com.purepoint.springbootpurepoint.playlist.controller;
 
+import com.purepoint.springbootpurepoint.playlist.domain.PlaylistLike;
+import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikeStatusResDto;
+import com.purepoint.springbootpurepoint.playlist.dto.UpdatePlaylistLikeStatusReqDto;
 import com.purepoint.springbootpurepoint.playlist.service.PlaylistService;
 import com.purepoint.springbootpurepoint.video.dto.VideoDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,10 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +32,21 @@ public class PlaylistController {
     @GetMapping("/videos")
     public ResponseEntity<List<VideoDto>> getPlaylistVideos(@RequestParam String playlistId) {
         return ResponseEntity.ok(playlistService.getPlaylistVideos(playlistId));
+    }
+
+    @Operation(summary = "유튜브 playlist 좋아요 상태를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 playlist 좋아요 상태 조회")})
+    @PostMapping("/playlistLikeStatus")
+    public ResponseEntity<PlaylistLikeStatusResDto> getPlaylistLikeStatus(@RequestBody PlaylistLikeStatusReqDto playlistLikeStatusReqDto) {
+        return ResponseEntity.ok(playlistService.getPlaylistLikeStatus(playlistLikeStatusReqDto));
+    }
+
+    @Operation(summary = "유튜브 playlist 좋아요 수를 업데이트합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 playlist 좋아요 수 업데이트")})
+    @PostMapping("/playlistLikes")
+    public ResponseEntity<PlaylistLike> updatePlaylistLikes(@RequestBody UpdatePlaylistLikeStatusReqDto updatePlaylistLikeStatusReqDto) {
+        return ResponseEntity.ok(playlistService.updatePlaylistLike(updatePlaylistLikeStatusReqDto));
     }
 }

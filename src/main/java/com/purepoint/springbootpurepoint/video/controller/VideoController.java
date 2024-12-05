@@ -39,7 +39,6 @@ public class VideoController {
             @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 영상 좋아요 상태 조회")})
     @PostMapping("/videoLikeStatus")
     public ResponseEntity<VideoLikeStatusResDto> getVideoLikeStatus(@RequestBody VideoLikeStatusReqDto videoLikeStatusReqDto) {
-        log.info("videoLikeStatus");
         return ResponseEntity.ok(videoService.getVideoLikeStatus(videoLikeStatusReqDto));
     }
 
