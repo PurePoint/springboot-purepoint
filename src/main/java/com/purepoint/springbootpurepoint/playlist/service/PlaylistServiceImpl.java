@@ -32,6 +32,15 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistLikeRepository playlistLikeRepository;
     private final PlaylistLikeMapper playlistLikeMapper = PlaylistLikeMapper.INSTANCE;
 
+    // 유튜브 playlistLikes 조회
+    public PlaylistLikesResDto getPlaylistLikes(String playlistId) {
+        String redisKey = "playlist:" + playlistId + ":likes";
+        String count = (String) redisTemplate.opsForValue().get(redisKey);
+        Long playlistLikes = count != null ? Long.parseLong(count) : 0L;
+
+        return playlistLikeMapper.toPlaylistLikesResDtoWithLikes(playlistId, playlistLikes);
+    }
+
     // 유튜브 playlist 검색
     @Override
     public List<PlaylistDto> searchYoutubePlaylist(String query) {

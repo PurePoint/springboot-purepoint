@@ -1,6 +1,5 @@
 package com.purepoint.springbootpurepoint.playlist.dto;
 
-import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;

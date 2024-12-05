@@ -1,15 +1,14 @@
 package com.purepoint.springbootpurepoint.playlist.service;
 
 import com.purepoint.springbootpurepoint.playlist.domain.PlaylistLike;
-import com.purepoint.springbootpurepoint.playlist.dto.PlaylistDto;
-import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikeStatusResDto;
-import com.purepoint.springbootpurepoint.playlist.dto.UpdatePlaylistLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.playlist.dto.*;
 import com.purepoint.springbootpurepoint.video.dto.VideoDto;
 
 import java.util.List;
 
 public interface PlaylistService {
+
+    PlaylistLikesResDto getPlaylistLikes(String playlistId);
 
     List<PlaylistDto> searchYoutubePlaylist(String query);
 

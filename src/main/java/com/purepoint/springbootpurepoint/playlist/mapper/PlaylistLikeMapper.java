@@ -2,6 +2,7 @@ package com.purepoint.springbootpurepoint.playlist.mapper;
 
 import com.purepoint.springbootpurepoint.playlist.domain.PlaylistLike;
 import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikeStatusResDto;
+import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikesResDto;
 import com.purepoint.springbootpurepoint.playlist.dto.UpdatePlaylistLikeStatusReqDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,4 +28,8 @@ public interface PlaylistLikeMapper {
             @Mapping(target = "playlistLikeStatus", source = "playlistLikeStatus")
     })
     PlaylistLikeStatusResDto toDto(PlaylistLike playlistLike);
+
+    @Mapping(target = "playlistId", source = "playlistId")
+    @Mapping(target = "playlistLikes", source = "playlistLikes")
+    PlaylistLikesResDto toPlaylistLikesResDtoWithLikes(String playlistId, Long playlistLikes);
 }
