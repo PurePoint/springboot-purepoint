@@ -2,6 +2,8 @@ package com.purepoint.springbootpurepoint.user.controller;
 
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
+import com.purepoint.springbootpurepoint.user.dto.request.WatchHistoryRequestDto;
+import com.purepoint.springbootpurepoint.user.dto.response.WatchHistoryResponseDto;
 import com.purepoint.springbootpurepoint.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -59,6 +62,19 @@ public class UserController {
         UserDto createdUser = userService.createUser(userDto);
 
         return ResponseEntity.ok(createdUser);
+    }
+
+    // 유저 시청기록 조회
+    @GetMapping("/watch/all")
+    public ResponseEntity<List<WatchHistoryResponseDto>> getUserWatch(@RequestParam UUID userId) {
+        return ResponseEntity.ok(userService.getWatchHistory(userId));
+    }
+
+    // 유저 시청기록 생성
+    @PostMapping("/watch")
+    public ResponseEntity<WatchHistoryResponseDto> createUserWatch(@RequestBody WatchHistoryRequestDto dto) {
+        log.info("Create User Watch: {}", dto);
+        return ResponseEntity.ok(userService.createWatchHistory(dto));
     }
 
 }

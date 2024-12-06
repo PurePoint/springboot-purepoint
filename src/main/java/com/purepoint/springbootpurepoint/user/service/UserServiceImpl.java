@@ -1,20 +1,28 @@
 package com.purepoint.springbootpurepoint.user.service;
 
+import com.purepoint.springbootpurepoint.user.domain.WatchHistory;
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateSocialRequestDto;
+import com.purepoint.springbootpurepoint.user.dto.request.WatchHistoryRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
+import com.purepoint.springbootpurepoint.user.dto.response.WatchHistoryResponseDto;
 import com.purepoint.springbootpurepoint.user.exception.UserNotFoundException;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import com.purepoint.springbootpurepoint.user.mapper.UserMapper;
+import com.purepoint.springbootpurepoint.user.mapper.WatchHistoryMapper;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
+import com.purepoint.springbootpurepoint.user.repository.WatchHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +30,10 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final WatchHistoryRepository watchHistoryRepository;
+
     private final UserMapper userMapper = UserMapper.INSTANCE;
+    private final WatchHistoryMapper watchHistoryMapper = WatchHistoryMapper.INSTANCE;
 
     @Override
     public UserLoginResponseDto loginUser(String providerName, String providerId, String email) {
@@ -128,5 +139,20 @@ public class UserServiceImpl implements UserService {
             user.setDeletedAt(LocalDateTime.now());
             userRepository.save(user);
         });
+    }
+
+    @Override
+    public WatchHistoryResponseDto createWatchHistory(WatchHistoryRequestDto dto) {
+        WatchHistory entity = watchHistoryRepository.save(watchHistoryMapper.toEntity(dto));
+        return watchHistoryMapper.toDto(entity);
+    }
+
+    @Override
+    public List<WatchHistoryResponseDto> getWatchHistory(UUID userId) {
+        List<WatchHistory> entity = watchHistoryRepository.findAllByUserId(userId);
+
+        return entity.stream()
+                .map(watchHistoryMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
