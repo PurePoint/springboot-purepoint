@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
             return userRepository.findByEmail(email)
                     .map(user -> {
                         log.info("기존 유저 로그인 확인 : email={}", user.getEmail());
-                        UserDto userDto = userMapper.toUserDto(user);
+                        UserDto userDto = userMapper.toDto(user);
                         return createUserLoginResponse(userDto, UserStatus.ACTIVE);
                     })
                     .orElseGet(() -> {
@@ -59,11 +58,11 @@ public class UserServiceImpl implements UserService {
 
         log.info("소셜 아이디 생성 시작!");
 
-        User createUser = userMapper.toUser(userDto);
+        User createUser = userMapper.toUserEntity(userDto);
 
         User userEntity = userRepository.save(createUser);
 
-        return userMapper.toUserDto(userEntity);
+        return userMapper.toDto(userEntity);
     }
 
     @Override
@@ -71,11 +70,11 @@ public class UserServiceImpl implements UserService {
 
         log.info("유저 정보 들어옴 {}", userDto.toString() );
 
-        User createUser = userMapper.toUser(userDto);
+        User createUser = userMapper.toUserEntity(userDto);
 
         User savedUser = userRepository.save(createUser);
 
-        return userMapper.toUserDto(savedUser);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return userMapper.toUserDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -101,7 +100,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         // 유저 정보 반환
-        return userMapper.toUserDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-        return userMapper.toUserDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
-        return userMapper.toUserDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
