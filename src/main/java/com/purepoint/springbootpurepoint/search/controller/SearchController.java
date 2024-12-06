@@ -3,6 +3,7 @@ package com.purepoint.springbootpurepoint.search.controller;
 import com.purepoint.springbootpurepoint.playlist.dto.PlaylistDto;
 import com.purepoint.springbootpurepoint.search.service.SearchService;
 import com.purepoint.springbootpurepoint.video.dto.VideoDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/search")
+@Tag(name = "검색 API", description = "영상 정보를 검색합니다.")
 public class SearchController {
 
     private final SearchService searchService;
