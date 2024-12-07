@@ -29,6 +29,8 @@ public abstract class VideoMapper {
                 .videoPublishedAt(video.getVideoPublishedAt())
                 .videoThumbnail(video.getVideoThumbnail())
                 .videoLikes(videoLikes)
+                .playlistId(video.getPlaylistId())
+                .videoPosition(video.getVideoPosition())
                 .build();
     }
 

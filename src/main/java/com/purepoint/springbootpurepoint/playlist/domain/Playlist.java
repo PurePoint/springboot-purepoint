@@ -1,9 +1,11 @@
 package com.purepoint.springbootpurepoint.playlist.domain;
 
+import com.purepoint.springbootpurepoint.video.domain.Video;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "playlist")
@@ -36,7 +38,13 @@ public class Playlist {
     @Column(name = "playlist_category")
     private Integer playlistCategory;
 
-//    @OneToMany(mappedBy = "playlist")
-//    private List<Video> videos;  // 여러 개의 Video가 하나의 Playlist에 포함될 수 있음
+    @Column(name = "channel_id")
+    private String channelId;
+
+    @Column(name = "channel_title")
+    private String channelTitle;
+
+    @OneToMany(mappedBy = "playlist")
+    private List<Video> videos;
 
 }

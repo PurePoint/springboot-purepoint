@@ -29,6 +29,8 @@ public abstract class PlaylistMapper {
                 .playlistPublishedAt(playlist.getPlaylistPublishedAt())
                 .playlistThumbnail(playlist.getPlaylistThumbnail())
                 .playlistLikes(playlistLikes)
+                .channelId(playlist.getChannelId())
+                .channelTitle(playlist.getChannelTitle())
                 .build();
     }
 
