@@ -1,10 +1,7 @@
 package com.purepoint.springbootpurepoint.video.controller;
 
 import com.purepoint.springbootpurepoint.video.domain.VideoLike;
-import com.purepoint.springbootpurepoint.video.dto.UpdateVideoLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.video.dto.VideoDto;
-import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusResDto;
+import com.purepoint.springbootpurepoint.video.dto.*;
 import com.purepoint.springbootpurepoint.video.service.VideoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/youtube/video")
@@ -30,8 +25,8 @@ public class VideoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 영상 조회")})
     @GetMapping
-    public ResponseEntity<List<VideoDto>> getVideo(String category) {
-        return ResponseEntity.ok(videoService.getYoutubeVideo(category));
+    public ResponseEntity<VideoPagingDto> getVideo(String category, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(videoService.getYoutubeVideo(category, page, size));
     }
 
     @Operation(summary = "유튜브 영상 좋아요 상태를 조회합니다.")

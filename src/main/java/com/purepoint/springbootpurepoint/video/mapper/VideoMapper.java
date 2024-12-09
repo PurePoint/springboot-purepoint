@@ -2,9 +2,11 @@ package com.purepoint.springbootpurepoint.video.mapper;
 
 import com.purepoint.springbootpurepoint.video.domain.Video;
 import com.purepoint.springbootpurepoint.video.dto.VideoDto;
+import com.purepoint.springbootpurepoint.video.dto.VideoPagingDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
@@ -34,15 +36,33 @@ public abstract class VideoMapper {
                 .build();
     }
 
-    public List<VideoDto> toDtoWithLikes(List<Video> videos, List<Long> videoLikes) {
-        return videos.stream()
-                .map(video -> toDtoWithLikes(video, getVideoLikeCount(video.getVideoId())))
-                .collect(Collectors.toList());
+    public Page<VideoDto> toDtoWithLikes(Page<Video> videos, List<Long> videoLikes) {
+        return videos.map(video -> {
+            int index = videos.getContent().indexOf(video);
+            Long videoLikeCount = (index >= 0 && index < videoLikes.size()) ? videoLikes.get(index) : 0L;
+            return toDtoWithLikes(video, videoLikeCount);
+        });
+    }
+
+    public VideoPagingDto toVideoPagingDto(List<VideoDto> videoDtos, Page<Video> videos) {
+        return VideoPagingDto.builder()
+                .content(videoDtos)
+                .totalPages(videos.getTotalPages())
+                .totalElements(videos.getTotalElements())
+                .currentPage(videos.getNumber())
+                .pageSize(videos.getSize())
+                .build();
     }
 
     public Long getVideoLikeCount(String videoId) {
         String redisKey = "video:" + videoId + ":likes";
         String count = (String) redisTemplate.opsForValue().get(redisKey);
         return count != null ? Long.parseLong(count) : 0L;
+    }
+
+    public List<VideoDto> toDtoWithLikes(List<Video> videos, List<Long> videoLikes) {
+        return videos.stream()
+                .map(video -> toDtoWithLikes(video, getVideoLikeCount(video.getVideoId())))
+                .collect(Collectors.toList());
     }
 }

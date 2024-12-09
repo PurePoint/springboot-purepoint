@@ -1,10 +1,7 @@
 package com.purepoint.springbootpurepoint.video.service;
 
 import com.purepoint.springbootpurepoint.video.domain.VideoLike;
-import com.purepoint.springbootpurepoint.video.dto.UpdateVideoLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.video.dto.VideoDto;
-import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.video.dto.VideoLikeStatusResDto;
+import com.purepoint.springbootpurepoint.video.dto.*;
 
 import java.util.List;
 
@@ -12,7 +9,7 @@ public interface VideoService {
     /**
      * @return 유튜브 영상 데이터 리턴
      */
-    List<VideoDto> getYoutubeVideo(String category);
+    VideoPagingDto getYoutubeVideo(String category, int page, int size);
 
     /**
      * @param query 검색 쿼리

@@ -10,6 +10,9 @@ import com.purepoint.springbootpurepoint.video.mapper.VideoMapper;
 import com.purepoint.springbootpurepoint.video.repository.VideoLikeRepository;
 import com.purepoint.springbootpurepoint.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -28,17 +31,26 @@ public class VideoServiceImpl implements VideoService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     // 유튜브 영상 리스트 가져오는 로직
-    public List<VideoDto> getYoutubeVideo(String category) {
-        List<Video> videos;
+    public VideoPagingDto getYoutubeVideo(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        if(category == null || category.equals("all")) { videos = videoRepository.findAll(); }
-        else {videos = videoRepository.findByVideoTitleContaining(category); }
+        Page<Video> videos;
+        if (category == null || category.equalsIgnoreCase("all")) {
+            videos = videoRepository.findAll(pageable);
+        } else {
+            videos = videoRepository.findByVideoTitleContaining(category, pageable);
+        }
 
-        List<Long> videoLikes = videos.stream()
-                .map(video -> videoMapper.getVideoLikeCount(video.getVideoId()))
+        // Video -> VideoDto 변환
+        List<VideoDto> videoDtos = videos.stream()
+                .map(video -> {
+                    Long videoLikes = videoMapper.getVideoLikeCount(video.getVideoId());
+                    return videoMapper.toDtoWithLikes(video, videoLikes);
+                })
                 .collect(Collectors.toList());
 
-        return videoMapper.toDtoWithLikes(videos, videoLikes);
+        // 페이지 정보와 함께 반환
+        return videoMapper.toVideoPagingDto(videoDtos, videos);
     }
 
     // 유튜브 영상을 검색하는 로직
