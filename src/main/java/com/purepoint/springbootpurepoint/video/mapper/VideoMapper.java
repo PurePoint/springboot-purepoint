@@ -47,7 +47,7 @@ public abstract class VideoMapper {
     public VideoPagingDto toVideoPagingDto(List<VideoDto> videoDtos, Page<Video> videos) {
         return VideoPagingDto.builder()
                 .content(videoDtos)
-                .totalPages(videos.getTotalPages())
+                .totalPages(videos.getTotalPages() - 1)
                 .totalElements(videos.getTotalElements())
                 .currentPage(videos.getNumber())
                 .pageSize(videos.getSize())
