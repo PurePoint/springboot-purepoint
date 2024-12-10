@@ -17,6 +17,8 @@ public interface VideoService {
      */
     List<VideoDto> searchYoutubeVideo(String query);
 
+    List<VideoDto> getRecommendVideo(String query, String playlistId);
+
     VideoLikeStatusResDto getVideoLikeStatus(VideoLikeStatusReqDto videoLikeStatusReqDto);
 
     /**

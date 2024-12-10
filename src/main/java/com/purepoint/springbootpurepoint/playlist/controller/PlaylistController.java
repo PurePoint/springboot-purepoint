@@ -40,6 +40,14 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistService.getPlaylistId(videoId));
     }
 
+    @Operation(summary = "추천 playlist를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 추천 playlist 조회")})
+    @GetMapping("/recommendPlaylist")
+    public ResponseEntity<List<PlaylistDto>> getRecommendPlaylist(String query, @RequestParam String playlistId) {
+        return ResponseEntity.ok(playlistService.getRecommendPlaylist(query, playlistId));
+    }
+
     @Operation(summary = "유튜브 playlist 좋아요 수를 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 playlist 좋아요 수 조회")})

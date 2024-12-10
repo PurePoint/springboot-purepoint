@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,6 +78,35 @@ public class VideoServiceImpl implements VideoService {
 
         return sortedVideos.stream()
                 .map(videoMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    // 추천 영상
+    public List<VideoDto> getRecommendVideo(String query, String playlistId) {
+        List<Video> videos = videoRepository.findByVideoTitleContaining(query);
+
+        // 선택된 playlist의 영상 제외
+        List<Video> remainingVideos = videos.stream()
+                .filter(video -> !Objects.equals(video.getPlaylistId(), playlistId))
+                .toList();
+
+        // 선택된 영상을 제외한 각 영상의 좋아요 수를 Redis에서 검색하여 정렬
+        List<Video> sortedVideos = remainingVideos.stream()
+                .sorted((v1, v2) -> {
+                    Long likes1 = (Long) redisTemplate.opsForValue().get("video:likes:" + v1.getVideoId());
+                    Long likes2 = (Long) redisTemplate.opsForValue().get("video:likes:" + v2.getVideoId());
+                    likes1 = (likes1 == null) ? 0 : likes1;
+                    likes2 = (likes2 == null) ? 0 : likes2;
+                    return likes2.compareTo(likes1);
+                })
+                .limit(12) // 상위 12개 영상 선택
+                .toList();
+
+        return sortedVideos.stream()
+                .map(video -> {
+                    Long videoLikes = videoMapper.getVideoLikeCount(video.getVideoId());
+                    return videoMapper.toDtoWithLikes(video, videoLikes);
+                })
                 .collect(Collectors.toList());
     }
 

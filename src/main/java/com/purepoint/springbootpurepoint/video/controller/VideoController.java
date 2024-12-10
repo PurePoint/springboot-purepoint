@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/youtube/video")
 @RequiredArgsConstructor
@@ -27,6 +29,14 @@ public class VideoController {
     @GetMapping
     public ResponseEntity<VideoPagingDto> getVideo(String category, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(videoService.getYoutubeVideo(category, page, size));
+    }
+
+    @Operation(summary = "추천 영상을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 추천 영상 조회")})
+    @GetMapping("/recommendVideo")
+    public ResponseEntity<List<VideoDto>> getRecommendVideo(String query, @RequestParam String playlistId) {
+        return ResponseEntity.ok(videoService.getRecommendVideo(query, playlistId));
     }
 
     @Operation(summary = "유튜브 영상 좋아요 상태를 조회합니다.")

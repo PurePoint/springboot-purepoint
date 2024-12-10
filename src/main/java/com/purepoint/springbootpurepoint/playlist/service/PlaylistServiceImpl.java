@@ -18,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +89,34 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
 
         return playlistIdResDto;
+    }
+
+    // 추천 playlist
+    public List<PlaylistDto> getRecommendPlaylist(String query, String playlistId) {
+        List<Playlist> playlists = playlistRepository.findByPlaylistTitleContaining(query);
+
+        // 선택된 playlist 제외
+        List<Playlist> remainingPlaylists = playlists.stream()
+                .filter(playlist -> !Objects.equals(playlist.getPlaylistId(), playlistId))
+                .toList();
+
+        // 선택된 playlist를 제외한 각 영상의 좋아요 수를 Redis에서 검색하여 정렬
+        List<Playlist> sortedPlaylists = remainingPlaylists.stream()
+                .sorted((p1, p2) -> {
+                    Long likes1 = (Long) redisTemplate.opsForValue().get("playlist:likes:" + p1.getPlaylistId());
+                    Long likes2 = (Long) redisTemplate.opsForValue().get("playlist:likes:" + p2.getPlaylistId());
+                    likes1 = (likes1 == null) ? 0 : likes1;
+                    likes2 = (likes2 == null) ? 0 : likes2;
+                    return likes2.compareTo(likes1);
+                })
+                .limit(12) // 상위 12개 영상 선택
+                .toList();
+
+        List<Long> playlistLikes = sortedPlaylists.stream()
+                .map(playlist -> playlistMapper.getPlaylistLikeCount(playlist.getPlaylistId()))
+                .toList();
+
+        return playlistMapper.toDtoWithLikes(sortedPlaylists, playlistLikes);
     }
 
 

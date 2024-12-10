@@ -16,6 +16,8 @@ public interface PlaylistService {
 
     PlaylistIdResDto getPlaylistId(String videoId);
 
+    List<PlaylistDto> getRecommendPlaylist(String query, String playlistId);
+
     PlaylistLikeStatusResDto getPlaylistLikeStatus(PlaylistLikeStatusReqDto playlistLikeStatusReqDto);
 
     PlaylistLike updatePlaylistLike(UpdatePlaylistLikeStatusReqDto updatePlaylistLikeStatusReqDto);
