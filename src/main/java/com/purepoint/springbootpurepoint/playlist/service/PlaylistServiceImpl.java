@@ -78,6 +78,18 @@ public class PlaylistServiceImpl implements PlaylistService {
         return videoMapper.toDtoWithLikes(playlistVideos, videoLikes);
     }
 
+    // 영상의 playlist가 존재하는지 조회하는 로직
+    public PlaylistIdResDto getPlaylistId(String videoId) {
+        Video video = videoRepository.findByVideoId(videoId);
+        PlaylistIdResDto playlistIdResDto = null;
+
+        if(video.getPlaylistId() != null) {
+            playlistIdResDto = playlistMapper.toPlaylistResDto(video.getPlaylistId());
+        }
+
+        return playlistIdResDto;
+    }
+
 
     // playlist에 대한 좋아요 상태를 조회하는 로직
     public PlaylistLikeStatusResDto getPlaylistLikeStatus(PlaylistLikeStatusReqDto playlistLikeStatusReqDto) {

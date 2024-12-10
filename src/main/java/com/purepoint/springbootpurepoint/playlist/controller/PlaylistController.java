@@ -1,10 +1,7 @@
 package com.purepoint.springbootpurepoint.playlist.controller;
 
 import com.purepoint.springbootpurepoint.playlist.domain.PlaylistLike;
-import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikeStatusReqDto;
-import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikeStatusResDto;
-import com.purepoint.springbootpurepoint.playlist.dto.PlaylistLikesResDto;
-import com.purepoint.springbootpurepoint.playlist.dto.UpdatePlaylistLikeStatusReqDto;
+import com.purepoint.springbootpurepoint.playlist.dto.*;
 import com.purepoint.springbootpurepoint.playlist.service.PlaylistService;
 import com.purepoint.springbootpurepoint.video.dto.VideoDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +30,14 @@ public class PlaylistController {
     @GetMapping("/videos")
     public ResponseEntity<List<VideoDto>> getPlaylistVideos(@RequestParam String playlistId) {
         return ResponseEntity.ok(playlistService.getPlaylistVideos(playlistId));
+    }
+
+    @Operation(summary = "유튜브 playlist 존재하는지 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 유튜브 playlist 존재여부 조회")})
+    @GetMapping
+    public ResponseEntity<PlaylistIdResDto> getPlaylistId(@RequestParam String videoId) {
+        return ResponseEntity.ok(playlistService.getPlaylistId(videoId));
     }
 
     @Operation(summary = "유튜브 playlist 좋아요 수를 조회합니다.")

@@ -22,4 +22,6 @@ public interface VideoRepository extends JpaRepository<Video, String> {
 
     @Query("SELECT v FROM Video v WHERE v.playlistId = :playlistId ORDER BY v.videoPosition ASC")
     List<Video> findByPlaylistIdOrderByVideoPositionAsc(@Param("playlistId") String playlistId);
+
+    Video findByVideoId(String videoId);
 }

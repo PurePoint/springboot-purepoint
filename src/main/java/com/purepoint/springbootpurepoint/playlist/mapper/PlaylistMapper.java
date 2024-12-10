@@ -2,6 +2,7 @@ package com.purepoint.springbootpurepoint.playlist.mapper;
 
 import com.purepoint.springbootpurepoint.playlist.domain.Playlist;
 import com.purepoint.springbootpurepoint.playlist.dto.PlaylistDto;
+import com.purepoint.springbootpurepoint.playlist.dto.PlaylistIdResDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,12 @@ public abstract class PlaylistMapper {
 
     @Autowired
     protected RedisTemplate<String, Object> redisTemplate;
+
+    public PlaylistIdResDto toPlaylistResDto(String playlistId) {
+        return PlaylistIdResDto.builder()
+                .playlistId(playlistId)
+                .build();
+    }
 
     @Mapping(target = "playlistLikes", ignore = true)
     public abstract PlaylistDto toDto(Playlist playlist);
