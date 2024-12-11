@@ -8,6 +8,7 @@ import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResD
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -17,13 +18,17 @@ import java.util.Optional;
 public interface CommunityMapper {
     CommunityMapper INSTANCE = Mappers.getMapper(CommunityMapper.class);
 
-    @Mapping(target = "postId", ignore = true)
-    @Mapping(source = "userId", target = "user.userId")
-    @Mapping(source = "postTitle", target = "postTitle")
-    @Mapping(source = "postContent", target = "postContent")
-    @Mapping(target = "postAt", ignore = true)
-    @Mapping(target = "postUpdateAt", ignore = true)
-    @Mapping(target = "postDeleteAt", ignore = true)
+    @Mappings({
+            @Mapping(target = "postId", ignore = true),
+            @Mapping(source = "userId", target = "userId"),
+            @Mapping(source = "videoId", target = "videoId"),
+            @Mapping(source = "playlistId", target = "playlistId"),
+            @Mapping(source = "postTitle", target = "postTitle"),
+            @Mapping(source = "postContent", target = "postContent"),
+            @Mapping(target = "postAt", ignore = true),
+            @Mapping(target = "postUpdateAt", ignore = true),
+            @Mapping(target = "postDeleteAt", ignore = true)
+    })
     Community createPostToEntity(CommCreatePostReqDto commCreatePostReqDto);
 
     @Mapping(target = "postId", ignore = true)

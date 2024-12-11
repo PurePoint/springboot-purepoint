@@ -1,6 +1,8 @@
 package com.purepoint.springbootpurepoint.community.domain;
 
+import com.purepoint.springbootpurepoint.playlist.domain.Playlist;
 import com.purepoint.springbootpurepoint.user.domain.User;
+import com.purepoint.springbootpurepoint.video.domain.Video;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,18 +26,20 @@ public class Community {
     @Column(name = "post_id", nullable = false, unique = true)
     private UUID postId;
 
-    @ManyToOne(fetch = FetchType.LAZY) //지연로딩
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
+
+    @Column(name = "video_id")
+    private String videoId;
+
+    @Column(name = "playlist_id")
+    private String playlistId;
 
     @Column(name = "post_title", nullable = false)
     private String postTitle;
 
     @Column(name = "post_contents")
     private String postContent;
-
-    @Column(name = "post_views")
-    private Integer postView = 0;
 
     @Column(name = "post_at")
     @CreationTimestamp
@@ -49,5 +53,17 @@ public class Community {
 
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id", insertable = false, updatable = false)
+    private Video video;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_id", insertable = false, updatable = false)
+    private Playlist playlist;
 
 }

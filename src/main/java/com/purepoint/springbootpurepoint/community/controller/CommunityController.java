@@ -30,7 +30,7 @@ public class CommunityController {
     @Operation(summary = "새 게시글을 생성합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 생성")})
-    @PostMapping("/posts")
+    @PostMapping("/post")
     public ResponseEntity<Community> createPost(@RequestBody CommCreatePostReqDto communityRequestDto) {
         Community createPost = communityService.createPost(communityRequestDto);
         return ResponseEntity.ok(createPost);
@@ -48,7 +48,7 @@ public class CommunityController {
     @Operation(summary = "게시글을 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
-    @GetMapping("/")
+    @GetMapping("/posts")
     public List<CommReadPostResDto> getPost() {
         return communityService.getPost();
     }
