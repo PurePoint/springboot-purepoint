@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class CreateReviewDto {
+public class CreateReviewReqDto {
 
     @Schema(description = "영상 ID", example = "-HpnldGdgbY")
     private String videoId;

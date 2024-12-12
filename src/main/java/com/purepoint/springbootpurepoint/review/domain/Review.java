@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -33,13 +34,13 @@ public class Review {
 
     @Column(name = "review_at")
     @CreationTimestamp
-    private String reviewAt;
+    private LocalDateTime reviewAt;
 
     @Column(name = "review_update_at")
-    private String reviewUpdateAt;
+    private LocalDateTime reviewUpdateAt;
 
     @Column(name = "review_delete_at")
-    private String reviewDeleteAt;
+    private LocalDateTime reviewDeleteAt;
 
     @Column(name = "user_id", nullable = false)
     private UUID userId;
