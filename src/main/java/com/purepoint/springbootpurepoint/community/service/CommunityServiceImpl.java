@@ -6,18 +6,22 @@ import com.purepoint.springbootpurepoint.community.dto.request.CommCreateComment
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 import com.purepoint.springbootpurepoint.community.mapper.CommentMapper;
 import com.purepoint.springbootpurepoint.community.mapper.CommunityMapper;
 import com.purepoint.springbootpurepoint.community.repository.CommentRepository;
 import com.purepoint.springbootpurepoint.community.repository.CommunityRepository;
+import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,6 +36,7 @@ public class CommunityServiceImpl implements CommunityService{
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper = CommentMapper.INSTANCE;
 
+    // 글 작성
     @Override
     public Community createPost(CommCreatePostReqDto commCreatePostReqDto) {
         userRepository.findById(commCreatePostReqDto.getUserId())
@@ -57,10 +62,22 @@ public class CommunityServiceImpl implements CommunityService{
         }
     }
 
+    // 글 조회
     @Override
-    public List<CommReadPostResDto> getPost() {
-        List<Community> community = communityRepository.findAll();
-        return communityMapper.toDto(community);
+    public CommPagingResDto getPost(String videoId, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Community> community = communityRepository.findAllByVideoId(videoId, pageable);
+
+        List<String> nicknames = community.stream()
+                .map(post -> userRepository.findById(post.getUserId())
+                        .map(User::getNickname)
+                        .orElse("Unknown"))
+                .toList();
+
+        List<CommReadPostResDto> commReadPostResDtos = communityMapper.toDto(community.getContent(), nicknames);
+
+        return communityMapper.toCommPagingDto(commReadPostResDtos, community);
     }
 
     @Override

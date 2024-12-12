@@ -9,11 +9,15 @@ import java.time.LocalDateTime;
 @Builder
 public class CommReadPostResDto {
 
-    @Schema(description = "게시글 제목", example = "제목", required = true)
+    @Schema(description = "게시글 제목", example = "제목")
     private String postTitle;
-    @Schema(description = "게시글 조회수", example = "123", required = true)
-    private Integer postView;
-    @Schema(description = "게시글 생성일", example = "2024-11-08T11:44:30.327959", required = true)
+    @Schema(description = "게시글 내용", example = "내용")
+    private String postContent;
+    @Schema( description = "사용자의 닉네임", example = "park")
+    private String nickname;
+    @Schema(description = "게시글 생성일", example = "2024-11-08T11:44:30.327959")
     private LocalDateTime postAt;
+    @Schema(description = "게시글 수정일", example = "2024-11-08T11:44:30.327959")
+    private LocalDateTime postUpdateAt;
 
 }

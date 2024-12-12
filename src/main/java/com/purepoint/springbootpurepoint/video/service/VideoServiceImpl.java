@@ -33,7 +33,7 @@ public class VideoServiceImpl implements VideoService {
 
     // 유튜브 영상 리스트 가져오는 로직
     public VideoPagingDto getYoutubeVideo(String category, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         Page<Video> videos;
         if (category == null || category.equalsIgnoreCase("all")) {

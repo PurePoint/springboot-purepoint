@@ -7,6 +7,7 @@ import com.purepoint.springbootpurepoint.community.dto.request.CommCreateComment
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public interface CommunityService {
     /**
      * @return 조회된 게시글 정보
      */
-    List<CommReadPostResDto> getPost();
+    CommPagingResDto getPost(String videoId, int page, int size);
 
     /**
      * @return 최신순으로 조회된 게시글 정보

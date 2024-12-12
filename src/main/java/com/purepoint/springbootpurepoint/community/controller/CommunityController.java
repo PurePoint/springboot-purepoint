@@ -6,6 +6,7 @@ import com.purepoint.springbootpurepoint.community.dto.request.CommCreateComment
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
+import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 import com.purepoint.springbootpurepoint.community.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,8 +50,8 @@ public class CommunityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
     @GetMapping("/posts")
-    public List<CommReadPostResDto> getPost() {
-        return communityService.getPost();
+    public ResponseEntity<CommPagingResDto> getPost(@RequestParam String videoId, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(communityService.getPost(videoId, page, size));
     }
 
     @Operation(summary = "최신순으로 게시글을 조회합니다.")
