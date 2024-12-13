@@ -27,13 +27,6 @@ public class UserController {
 
     private final UserService userService;
 
-    // 테스트
-    @GetMapping("")
-    public String test() {
-        log.info("Hello User");
-        return "Hello User";
-    }
-
     // 유저 조회
     @Operation(summary = "특정 ID를 가진 사용자를 조회합니다.", description = "주어진 ID에 해당하는 사용자를 반환합니다.")
     @ApiResponses(value = {
