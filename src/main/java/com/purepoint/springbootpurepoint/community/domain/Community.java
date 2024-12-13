@@ -18,15 +18,14 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Community {
 
     @Id
     @GeneratedValue
-    @Column(name = "post_id", nullable = false, unique = true)
+    @Column(name = "post_id", nullable = false)
     private UUID postId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private UUID userId;
 
     @Column(name = "video_id")
@@ -35,7 +34,7 @@ public class Community {
     @Column(name = "playlist_id")
     private String playlistId;
 
-    @Column(name = "post_title", nullable = false)
+    @Column(name = "post_title")
     private String postTitle;
 
     @Column(name = "post_contents")

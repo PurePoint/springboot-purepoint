@@ -47,16 +47,18 @@ public class CommunityServiceImpl implements CommunityService{
         return community;
     }
 
+    // 글 수정
     @Override
     public Community updatePost(CommUpdatePostReqDto commUpdatePostReqDto) {
-        Optional<Community> optionalCommunity = communityRepository.findById(commUpdatePostReqDto.getPostId());
+        Community community = communityRepository.findById(commUpdatePostReqDto.getPostId())
+                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + commUpdatePostReqDto.getPostId()));
 
-        if(optionalCommunity.isPresent()) {
-            Community community = optionalCommunity.get();
-            community = communityMapper.updatePostToEntity(commUpdatePostReqDto);
-            community = communityRepository.save(community);
-            return community;
+        userRepository.findById(commUpdatePostReqDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if(community != null) {
+            community = communityMapper.updatePostToEntity(community, commUpdatePostReqDto);
+            return communityRepository.save(community);
         } else {
             throw new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + commUpdatePostReqDto.getPostId());
         }

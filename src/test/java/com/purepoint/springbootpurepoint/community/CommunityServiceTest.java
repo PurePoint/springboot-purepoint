@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @Slf4j
@@ -71,38 +72,47 @@ public class CommunityServiceTest {
     }
 
 
-//    @Test
-//    @DisplayName("게시글 수정 서비스 테스트")
-//    public void updatePostTest() {
-//
-//        // 게시글 생성
-//        CommCreatePostReqDto createRequestDto = CommCreatePostReqDto.builder()
-//                .userId(UUID.fromString("343a7d2a-d340-4e36-a8cb-c3785131a2cf"))
-//                .postTitle("초기 제목")
-//                .postContent("초기 내용")
-//                .build();
-//
-//        Community createdPost = communityService.createPost(createRequestDto);
-//
-//        log.info("createPost : " + createdPost);
-//
-//        // 생성된 게시글 내용 수정
-//        CommUpdatePostReqDto updateRequestDto = CommUpdatePostReqDto.builder()
-//                .postId(createdPost.getPostId())
-//                .postTitle("수정된 제목")
-//                .postContent("수정된 내용")
-//                .build();
-//
-//        Community updatedPost = communityService.updatePost(updateRequestDto);
-//
-//        // 수정된 내용이 DB 반영되었는지 검증
-//        log.info("createPost : " + updatedPost);
-//        Optional<Community> savedPost = communityRepository.findById(updatedPost.getPostId());
-//        assertThat(savedPost).isPresent();
-//        assertThat(savedPost.get().getPostTitle()).isEqualTo(updateRequestDto.getPostTitle());
-//        assertThat(savedPost.get().getPostContent()).isEqualTo(updateRequestDto.getPostContent());
-//
-//    }
+    @Test
+    @DisplayName("게시글 수정 서비스 테스트")
+    public void updatePostTest() {
+
+        // 게시글 생성
+        CommCreatePostReqDto requestDto = CommCreatePostReqDto.builder()
+                .videoId("-JHAUaOq6l0")
+                .playlistId(null)
+                .userId(UUID.fromString(("ce4bb5a1-5ffe-4137-bdfc-c4959c184a7e")))
+                .postTitle("테스트 제목")
+                .postContent("테스트 내용")
+                .build();
+
+        Community createdPost = communityService.createPost(requestDto);
+
+        log.info("createPost : " + communityRepository.findAll());
+        log.info("getPostId : " + createdPost.getPostId());
+        log.info("getPostTitle : " + createdPost.getPostTitle());
+        log.info("getPostContent : " + createdPost.getPostContent());
+
+        // 생성된 게시글 내용 수정
+        CommUpdatePostReqDto updateRequestDto = CommUpdatePostReqDto.builder()
+                .postId(createdPost.getPostId())
+                .userId(UUID.fromString(("ce4bb5a1-5ffe-4137-bdfc-c4959c184a7e")))
+                .postTitle("수정된 제목")
+                .postContent("수정된 내용")
+                .build();
+
+        Community updatedPost = communityService.updatePost(updateRequestDto);
+
+        log.info("getPostId: {}", updatedPost.getPostId());
+
+        // 수정된 내용이 DB 반영되었는지 검증
+        log.info("createPost : " + updatedPost);
+        Optional<Community> savedPost = communityRepository.findById(updatedPost.getPostId());
+        assertThat(savedPost).isPresent();
+        log.info("getPostId : " + savedPost.get().getPostId());
+        log.info("getPostTitle : " + savedPost.get().getPostTitle());
+        log.info("getPostContent : " + savedPost.get().getPostContent());
+
+    }
 
     @Test
     @DisplayName("게시글 전체 조회 서비스 테스트")

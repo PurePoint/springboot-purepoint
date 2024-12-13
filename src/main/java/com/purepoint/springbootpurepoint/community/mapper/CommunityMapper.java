@@ -13,6 +13,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,22 +35,31 @@ public interface CommunityMapper {
     })
     Community createPostToEntity(CommCreatePostReqDto commCreatePostReqDto);
 
-    @Mapping(target = "postId", ignore = true)
-    @Mapping(source = "postTitle", target = "postTitle")
-    @Mapping(source = "postContent", target = "postContent")
-    @Mapping(target = "postUpdateAt", expression = "java(java.time.LocalDateTime.now())")
-    Community updatePostToEntity(CommUpdatePostReqDto commUpdatePostReqDto);
+    default Community updatePostToEntity(Community community, CommUpdatePostReqDto commUpdatePostReqDto) {
+        return Community.builder()
+                .postId(community.getPostId())
+                .postTitle(commUpdatePostReqDto.getPostTitle())
+                .postContent(commUpdatePostReqDto.getPostContent())
+                .postUpdateAt(LocalDateTime.now())
+                .postAt(community.getPostAt())
+                .postDeleteAt(community.getPostDeleteAt())
+                .playlistId(community.getPlaylistId())
+                .videoId(community.getVideoId())
+                .userId(community.getUserId())
+                .build();
+    }
 
     @Mapping(target = "postId", ignore = true)
     @Mapping(target = "postDeleteAt", expression = "java(java.time.LocalDateTime.now())")
     Community deletePostToEntity(Community community);
 
     @Mappings({
+            @Mapping(source = "community.postId", target = "postId"),
+            @Mapping(source = "community.userId", target = "userId"),
             @Mapping(source = "community.postTitle", target = "postTitle"),
             @Mapping(source = "community.postContent", target = "postContent"),
             @Mapping(source = "community.postAt", target = "postAt"),
-            @Mapping(source = "community.postUpdateAt", target = "postUpdateAt"),
-            // nickname을 매핑하기 위해 별도의 방법 추가 필요
+            @Mapping(source = "community.postUpdateAt", target = "postUpdateAt")
     })
     CommReadPostResDto toDto(Community community, String nickname);
 
