@@ -8,6 +8,7 @@ import com.purepoint.springbootpurepoint.oauth.dto.response.OAuthResponseDto;
 import com.purepoint.springbootpurepoint.common.jwt.JwtTokenProvider;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
 import com.purepoint.springbootpurepoint.user.dto.UserStatus;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.request.UserCreateSocialRequestDto;
 import com.purepoint.springbootpurepoint.user.dto.response.UserLoginResponseDto;
 import com.purepoint.springbootpurepoint.user.mapper.UserMapper;
@@ -117,12 +118,29 @@ public class OAuthServiceImpl implements OAuthService {
             throw new RuntimeException(e);
         }
     }
-
-    // 퓨어포인트 로그인
+    
+    // 퓨어 포인트 로그인
     @Override
-    public UserDto purePointLogin(String accessToken) {
-        return userService.getUserById(jwtTokenProvider.getUserIdFromToken(accessToken));
+    public OAuthResponseDto purePointLogin(String email, String password) {
+        // 이메일 패스워드를 받아서 사용자 인증 처리 후 access token 발급
+        UserLoginResponseDto user = userService.loginUser(email, password); // 퓨어포인트 자체로그인
+
+        String jwtToken = jwtTokenProvider.createToken(user.getUserInfo(), "user");
+
+        return OAuthResponseDto.builder()
+                .accessToken(jwtToken)
+                .refreshToken(null)
+                .loginStatus(UserStatus.ACTIVE)
+                .build();
     }
+
+    // 퓨어 포인트 회원가입
+    @Override
+    public void purePointSignup(UserCreateRequestDto userInfo) {
+        // 사용자가 입력한 정보를 가지고 회원가입 진행
+        userService.createUser(userInfo);
+    }
+
 
     private Map<String, Object> getOauthToken(String authCode) throws IOException {
         String OauthTokenUrl = "https://oauth2.googleapis.com/token";

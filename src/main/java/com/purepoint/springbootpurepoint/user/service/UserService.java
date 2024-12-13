@@ -18,6 +18,7 @@ public interface UserService{
 
     // 사용자의 소셜 로그인 정보를 받아 로그인 진행
     UserLoginResponseDto loginUser(String providerName, String providerId, String email);
+    UserLoginResponseDto loginUser(String email, String password);
 
     // 사용자의 정보를 조회
     UserDto getUserById(UUID userId);

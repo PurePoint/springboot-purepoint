@@ -2,6 +2,9 @@ package com.purepoint.springbootpurepoint.oauth.service;
 
 import com.purepoint.springbootpurepoint.oauth.dto.response.OAuthResponseDto;
 import com.purepoint.springbootpurepoint.user.dto.UserDto;
+import com.purepoint.springbootpurepoint.user.dto.request.UserCreateRequestDto;
+
+import java.util.Map;
 
 public interface OAuthService {
 
@@ -9,5 +12,7 @@ public interface OAuthService {
 
     OAuthResponseDto handleGoogleCallback(String authCode);
 
-    UserDto purePointLogin(String accessToken);
+    OAuthResponseDto purePointLogin(String email, String password);
+
+    void purePointSignup(UserCreateRequestDto userInfo);
 }

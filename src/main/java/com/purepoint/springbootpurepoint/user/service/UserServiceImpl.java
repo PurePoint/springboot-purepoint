@@ -57,6 +57,20 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserLoginResponseDto loginUser(String email, String password) {
+        // 아이디와 페드워드를 검사 후 로그인 처리
+        try{
+            Optional<User> user = userRepository.findByEmailAndPassword(email, password);
+            if(user.isEmpty()) {
+                throw new UserNotFoundException("User not found with email: " + email);
+            }
+            return createUserLoginResponse(userMapper.toDto(user.get()), UserStatus.ACTIVE);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private UserLoginResponseDto createUserLoginResponse(UserDto userDto, UserStatus status) {
         return UserLoginResponseDto.builder()
                 .userInfo(userDto)
@@ -79,9 +93,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserCreateRequestDto userDto) {
 
-        log.info("유저 정보 들어옴 {}", userDto.toString() );
+        log.info("유저 정보 들어옴 {}", userDto.toString());
 
-        User createUser = userMapper.toUserEntity(userDto);
+        User createUser = userMapper.toUserEntity(userDto)
+                .toBuilder()
+                .providerName("purepoint")
+                .build();
 
         User savedUser = userRepository.save(createUser);
 
