@@ -24,5 +24,7 @@ public class CommReadPostResDto {
     private LocalDateTime postAt;
     @Schema(description = "게시글 수정일", example = "2024-11-08T11:44:30.327959")
     private LocalDateTime postUpdateAt;
+    @Schema(description = "게시글 삭제일", example = "2024-11-08T11:44:30.327959")
+    private LocalDateTime postDeleteAt;
 
 }

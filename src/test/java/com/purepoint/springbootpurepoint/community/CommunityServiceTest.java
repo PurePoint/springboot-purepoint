@@ -4,6 +4,7 @@ import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommDeletePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
@@ -117,7 +118,6 @@ public class CommunityServiceTest {
     @Test
     @DisplayName("게시글 전체 조회 서비스 테스트")
     public void getPostTest() {
-
         // 게시글 생성 시 데이터 주입
         List<Community> createdPost = new ArrayList<>();
 
@@ -150,6 +150,53 @@ public class CommunityServiceTest {
         log.info("getTotalPages : " + savedPost.getTotalPages());
         log.info("getTotalElements : " + savedPost.getTotalElements());
 
+
+    }
+
+
+    @Test
+    @DisplayName("게시글 삭제 서비스 테스트")
+    public void deletePostTest() {
+        // 게시글 생성 시 데이터 주입
+        List<Community> createdPost = new ArrayList<>();
+
+        for(int i=0; i<3; i++) {
+            CommCreatePostReqDto requestDto = CommCreatePostReqDto.builder()
+                    .videoId("-JHAUaOq6l0")
+                    .playlistId(null)
+                    .userId(UUID.fromString("ce4bb5a1-5ffe-4137-bdfc-c4959c184a7e"))
+                    .postTitle("테스트 제목"+ i)
+                    .postContent("테스트 내용"+ i)
+                    .build();
+
+            createdPost.add(communityService.createPost(requestDto));
+        }
+
+        // 작성된 게시글 조회
+        for (Community community : createdPost) {
+            Optional<Community> optionalCommunity = communityRepository.findById(community.getPostId());
+
+            optionalCommunity.ifPresent(
+                    value -> log.info("삭제 전 게시글 조회: {}, {}, {}", value.getPostId(), value.getUserId(), value.getPostDeleteAt())
+            );
+        }
+
+        CommDeletePostReqDto commDeletePostReqDto = CommDeletePostReqDto.builder()
+                .postId(createdPost.get(0).getPostId())
+                .userId(createdPost.get(0).getUserId())
+                .build();
+
+        // 게시글 삭제 메서드 호출
+        communityService.deletePost(commDeletePostReqDto);
+
+        // 작성된 게시글 조회
+        for (Community community : createdPost) {
+            Optional<Community> optionalCommunity = communityRepository.findById(community.getPostId());
+
+            optionalCommunity.ifPresent(
+                    value -> log.info("삭제 후 게시글 조회: {}, {}, {}", value.getPostId(), value.getUserId(), value.getPostDeleteAt())
+            );
+        }
 
     }
 
@@ -214,40 +261,6 @@ public class CommunityServiceTest {
 //        }
 //    }
 
-//    @Test
-//    @DisplayName("게시글 삭제 서비스 테스트")
-//    public void deletePostTest() {
-//        // 게시글 생성 시 데이터 주입
-//        List<Community> createdPost = new ArrayList<>();
-//
-//        for (int i = 0; i < 3; i++) {
-//            CommCreatePostReqDto requestDto = CommCreatePostReqDto.builder()
-//                    .userId(UUID.randomUUID())
-//                    .postTitle("테스트 제목" + i)
-//                    .build();
-//
-//            Community community = communityService.createPost(requestDto);
-//
-//            Community.builder()
-//                    .postView(i)
-//                    .build();
-//
-//            createdPost.add(community);
-//        }
-//
-//        // 작성된 게시글 조회
-//        for(int i = 0; i < createdPost.size(); i++) {
-//            log.info("삭제 전 게시글 조회: " + communityRepository.findById(createdPost.get(i).getPostId()));
-//        }
-//
-//        // 게시글 삭제 메서드 호출
-//        communityService.deletePost(createdPost.get(0).getPostId());
-//
-//        for(int i = 0; i < createdPost.size(); i++) {
-//            log.info("삭제 후 게시글 조회: " + communityRepository.findById(createdPost.get(i).getPostId()));
-//        }
-//
-//    }
 
 //    @Test
 //    @DisplayName("게시글 디테일 조회 서비스 테스트")

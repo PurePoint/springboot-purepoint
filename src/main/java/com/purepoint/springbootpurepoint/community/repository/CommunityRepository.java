@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public interface CommunityRepository extends JpaRepository<Community, UUID> {
 
-    Page<Community> findAllByVideoId(String videoId, Pageable pageable);
+    Page<Community> findAllByVideoIdAndPostDeleteAtIsNull(String videoId, Pageable pageable);
 
 //    @Query("SELECT c FROM Community c " +
 //            "LEFT JOIN FETCH c.comments cm " +

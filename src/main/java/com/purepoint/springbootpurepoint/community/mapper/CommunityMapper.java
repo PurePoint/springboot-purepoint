@@ -46,12 +46,28 @@ public interface CommunityMapper {
                 .playlistId(community.getPlaylistId())
                 .videoId(community.getVideoId())
                 .userId(community.getUserId())
+                .user(community.getUser())
+                .video(community.getVideo())
+                .playlist(community.getPlaylist())
                 .build();
     }
 
-    @Mapping(target = "postId", ignore = true)
-    @Mapping(target = "postDeleteAt", expression = "java(java.time.LocalDateTime.now())")
-    Community deletePostToEntity(Community community);
+    default Community deletePostToEntity(Community community) {
+        return Community.builder()
+                .postId(community.getPostId())
+                .postTitle(community.getPostTitle())
+                .postContent(community.getPostContent())
+                .postAt(community.getPostAt())
+                .postUpdateAt(community.getPostUpdateAt())
+                .postDeleteAt(LocalDateTime.now())
+                .playlistId(community.getPlaylistId())
+                .videoId(community.getVideoId())
+                .userId(community.getUserId())
+                .user(community.getUser())
+                .video(community.getVideo())
+                .playlist(community.getPlaylist())
+                .build();
+    }
 
     @Mappings({
             @Mapping(source = "community.postId", target = "postId"),
@@ -59,7 +75,8 @@ public interface CommunityMapper {
             @Mapping(source = "community.postTitle", target = "postTitle"),
             @Mapping(source = "community.postContent", target = "postContent"),
             @Mapping(source = "community.postAt", target = "postAt"),
-            @Mapping(source = "community.postUpdateAt", target = "postUpdateAt")
+            @Mapping(source = "community.postUpdateAt", target = "postUpdateAt"),
+            @Mapping(source = "community.postDeleteAt", target = "postDeleteAt")
     })
     CommReadPostResDto toDto(Community community, String nickname);
 

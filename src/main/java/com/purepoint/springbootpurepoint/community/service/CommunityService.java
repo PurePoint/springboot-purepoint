@@ -5,6 +5,7 @@ import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommDeletePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
@@ -46,24 +47,16 @@ public interface CommunityService {
     List<CommReadPostResDto> getPopularPost();
 
     /**
-     * @param postId 삭제할 게시글 정보
+     * @param commDeletePostReqDto 삭제할 게시글 정보
      */
-    void deletePost(UUID postId);
-
-    /**
-     * 게시글 ID로 상세 정보를 조회합니다.
-     *
-     * @param postId 게시글 ID
-     * @return 조회된 게시글 상세 정보
-     */
-    CommDetailPostResDto getDetailPost(UUID postId);
+    void deletePost(CommDeletePostReqDto commDeletePostReqDto);
 
     /**
      * @param commentRequestDto 생성할 댓글 정보
      * @return 생성된 댓글 정보
      */
     // ToDo 새 댓글 생성 서비스 구현
-    Comment createComment(CommCreateCommentReqDto commentRequestDto);
+//    Comment createComment(CommCreateCommentReqDto commentRequestDto);
 
     // ToDo 댓글 수정 서비스 구현
 

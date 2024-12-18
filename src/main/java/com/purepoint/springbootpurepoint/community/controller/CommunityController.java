@@ -4,6 +4,7 @@ import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommDeletePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
@@ -74,26 +75,18 @@ public class CommunityController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 삭제")})
     @DeleteMapping("/posts/{postId}")
-    public void deletePost(@PathVariable UUID postId) {
-        communityService.deletePost(postId);
+    public void deletePost(@RequestBody CommDeletePostReqDto commDeletePostReqDto) {
+        communityService.deletePost(commDeletePostReqDto);
     }
 
-    @Operation(summary = "게시글 디테일을 조회합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 게시글 디테일 조회")})
-    @GetMapping("/{postId}")
-    public CommDetailPostResDto getDetailPost(@PathVariable UUID postId) {
-        return communityService.getDetailPost(postId);
-    }
-
-    @Operation(summary = "새 댓글을 생성합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 생성")})
-    @PostMapping("/{postId}/createComments")
-    public ResponseEntity<Comment> createCommentsPost(CommCreateCommentReqDto commCreateCommentReqDto) {
-        Comment comment = communityService.createComment(commCreateCommentReqDto);
-        return ResponseEntity.ok(comment);
-    }
+//    @Operation(summary = "새 댓글을 생성합니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 생성")})
+//    @PostMapping("/{postId}/createComments")
+//    public ResponseEntity<Comment> createCommentsPost(CommCreateCommentReqDto commCreateCommentReqDto) {
+//        Comment comment = communityService.createComment(commCreateCommentReqDto);
+//        return ResponseEntity.ok(comment);
+//    }
 
     @Operation(summary = "댓글을 수정합니다.")
     @ApiResponses(value = {
