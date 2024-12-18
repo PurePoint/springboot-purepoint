@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -26,5 +27,6 @@ public class CommReadPostResDto {
     private LocalDateTime postUpdateAt;
     @Schema(description = "게시글 삭제일", example = "2024-11-08T11:44:30.327959")
     private LocalDateTime postDeleteAt;
-
+    @Schema(description = "댓글")
+    private List<CommCommentResDto> comments;
 }

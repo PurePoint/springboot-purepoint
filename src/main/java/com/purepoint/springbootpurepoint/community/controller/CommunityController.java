@@ -6,9 +6,7 @@ import com.purepoint.springbootpurepoint.community.dto.request.CommCreateComment
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommDeletePostReqDto;
 import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
-import com.purepoint.springbootpurepoint.community.dto.response.CommDetailPostResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
-import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
 import com.purepoint.springbootpurepoint.community.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,9 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/community")
@@ -55,22 +50,6 @@ public class CommunityController {
         return ResponseEntity.ok(communityService.getPost(videoId, page, size));
     }
 
-    @Operation(summary = "최신순으로 게시글을 조회합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
-    @GetMapping("/latest")
-    public List<CommReadPostResDto> getLatestPost() {
-        return communityService.getLatestPost();
-    }
-
-    @Operation(summary = "조회순으로 게시글을 조회합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 게시글 조회")})
-    @GetMapping("/favorites")
-    public List<CommReadPostResDto> getPopularPost() {
-        return communityService.getPopularPost();
-    }
-
     @Operation(summary = "게시글을 삭제합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 게시글 삭제")})
@@ -79,30 +58,30 @@ public class CommunityController {
         communityService.deletePost(commDeletePostReqDto);
     }
 
-//    @Operation(summary = "새 댓글을 생성합니다.")
+    @Operation(summary = "새 댓글을 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 생성")})
+    @PostMapping("/{postId}/createComments")
+    public ResponseEntity<Comment> createCommentsPost(CommCreateCommentReqDto commCreateCommentReqDto) {
+        Comment comment = communityService.createComment(commCreateCommentReqDto);
+        return ResponseEntity.ok(comment);
+    }
+
+//    @Operation(summary = "댓글을 수정합니다.")
 //    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 생성")})
-//    @PostMapping("/{postId}/createComments")
-//    public ResponseEntity<Comment> createCommentsPost(CommCreateCommentReqDto commCreateCommentReqDto) {
-//        Comment comment = communityService.createComment(commCreateCommentReqDto);
-//        return ResponseEntity.ok(comment);
+//            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 수정")})
+//    @PutMapping("/updateComments/{commentId}")
+//    public ResponseEntity<Comment> updateCommentsPost(@PathVariable UUID commentId) {
+//        // ToDo 댓글 수정 서비스 호출
+//        return null;
 //    }
 
-    @Operation(summary = "댓글을 수정합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 수정")})
-    @PutMapping("/updateComments/{commentId}")
-    public ResponseEntity<Comment> updateCommentsPost(@PathVariable UUID commentId) {
-        // ToDo 댓글 수정 서비스 호출
-        return null;
-    }
-
-    @Operation(summary = "댓글을 삭제합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 삭제")})
-    @DeleteMapping("/deleteComments/{commentId}")
-    public ResponseEntity<Comment> deleteCommentsPost(@PathVariable UUID commentId) {
-        // ToDo 댓글 삭제 서비스 호출
-        return null;
-    }
+//    @Operation(summary = "댓글을 삭제합니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "성공적으로 댓글 삭제")})
+//    @DeleteMapping("/deleteComments/{commentId}")
+//    public ResponseEntity<Comment> deleteCommentsPost(@PathVariable UUID commentId) {
+//        // ToDo 댓글 삭제 서비스 호출
+//        return null;
+//    }
 }
