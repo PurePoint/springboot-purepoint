@@ -2,12 +2,16 @@ package com.purepoint.springbootpurepoint.community.mapper;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommDeleteCommentReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.CommUpdateCommentReqDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
 import com.purepoint.springbootpurepoint.user.domain.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+
+import java.time.LocalDateTime;
 
 /**
  * 댓글(Comment) 엔티티와 DTO 간의 매핑을 담당하는 Mapper 인터페이스
@@ -39,9 +43,11 @@ public interface CommentMapper {
             @Mapping(target = "commentAt", ignore = true), // 생성 시간은 자동 설정됨
             @Mapping(target = "commentUpdateAt", ignore = true),
             @Mapping(target = "commentDeleteAt", ignore = true),
-            @Mapping(source = "parentCommentId", target = "parentCommentId")
+            @Mapping(source = "parentCommentId", target = "parentCommentId"),
+            @Mapping(target = "user", ignore = true),
+            @Mapping(target = "community", ignore = true)
     })
-    Comment createPostToEntity(CommCreateCommentReqDto commCreateCommentReqDto);
+    Comment createCommentToEntity(CommCreateCommentReqDto commCreateCommentReqDto);
 
     /**
      * Comment 엔티티를 CommCommentResDto로 변환
@@ -61,6 +67,32 @@ public interface CommentMapper {
                 .commentAt(comment.getCommentAt())
                 .commentUpdateAt(comment.getCommentUpdateAt())
                 .commentDeleteAt(comment.getCommentDeleteAt())
+                .build();
+    }
+
+    default Comment updateCommentToEntity(Comment comment, CommUpdateCommentReqDto commUpdateCommentReqDto) {
+        return Comment.builder()
+                .commentId(comment.getCommentId())
+                .userId(comment.getUserId())
+                .postId(comment.getPostId())
+                .commentContents(commUpdateCommentReqDto.getCommentContents())
+                .commentAt(comment.getCommentAt())
+                .commentUpdateAt(LocalDateTime.now())
+                .commentDeleteAt(comment.getCommentDeleteAt())
+                .parentCommentId(comment.getParentCommentId())
+                .build();
+    }
+
+    default Comment deleteCommentToEntity(Comment comment) {
+        return Comment.builder()
+                .commentId(comment.getCommentId())
+                .userId(comment.getUserId())
+                .postId(comment.getPostId())
+                .commentContents(comment.getCommentContents())
+                .commentAt(comment.getCommentAt())
+                .commentUpdateAt(comment.getCommentUpdateAt())
+                .commentDeleteAt(LocalDateTime.now())
+                .parentCommentId(comment.getParentCommentId())
                 .build();
     }
 

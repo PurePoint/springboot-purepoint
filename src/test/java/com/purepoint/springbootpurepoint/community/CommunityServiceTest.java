@@ -2,11 +2,8 @@ package com.purepoint.springbootpurepoint.community;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
-import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
-import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
-import com.purepoint.springbootpurepoint.community.dto.request.CommDeletePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.*;
 import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
-import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
 import com.purepoint.springbootpurepoint.community.mapper.CommunityMapper;
 import com.purepoint.springbootpurepoint.community.repository.CommentRepository;
 import com.purepoint.springbootpurepoint.community.repository.CommunityRepository;
@@ -18,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
+import org.springframework.expression.spel.ast.OpOr;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -208,126 +206,6 @@ public class CommunityServiceTest {
 
     }
 
-//    @Test
-//    @DisplayName("최신순 게시글 조회 서비스 테스트")
-//    public void getLatestPostTest() throws InterruptedException {
-//        // 게시글 생성 시 데이터 주입
-//        List<Community> createdPost = new ArrayList<>();
-//
-//        for (int i = 0; i < 3; i++) {
-//            CommCreatePostReqDto requestDto = CommCreatePostReqDto.builder()
-//                    .userId(UUID.randomUUID())
-//                    .postTitle("테스트 제목" + i)
-//                    .build();
-//
-//            createdPost.add(communityService.createPost(requestDto));
-//            Thread.sleep(100);
-//        }
-//
-//        // 최신순 게시글 조회 메서드 호출
-//        List<CommReadPostResDto> savedPost = communityService.getLatestPost();
-//
-//        // 게시글 조회 결과 검증 (최신순으로 정렬되었는지 확인)
-//        assertThat(savedPost).isNotEmpty();
-//        for(int i = 0; i < createdPost.size(); i++) {
-//            log.info("게시글 조회: " + createdPost.get(i).getPostAt());
-//            log.info("최신순 게시글 조회: " + savedPost.get(i).getPostAt());
-//        }
-//    }
-
-//    @Test
-//    @DisplayName("조회순(인기순) 게시글 조회 서비스 테스트")
-//    public void getPopularPostTest() {
-//        // 게시글 생성 시 데이터 주입
-//        List<Community> createdPost = new ArrayList<>();
-//
-//        for (int i = 0; i < 3; i++) {
-//            CommCreatePostReqDto requestDto = CommCreatePostReqDto.builder()
-//                    .userId(UUID.randomUUID())
-//                    .postTitle("테스트 제목" + i)
-//                    .build();
-//            Community community = communityService.createPost(requestDto);
-//
-//            Community.builder()
-//                    .postView(i)
-//                    .build();
-//
-//            createdPost.add(community);
-//        }
-//
-//        // 조회순(인기순) 게시글 조회 메서드 호출
-//        List<CommReadPostResDto> savedPost = communityService.getPopularPost();
-//
-//        // 게시글 조회 결과 검증 (조회순(인기순)으로 정렬되었는지 확인)
-//        assertThat(savedPost).isNotEmpty();
-//        for(int i = 0; i < createdPost.size(); i++) {
-//            log.info("게시글 조회: " + createdPost.get(i).getPostView());
-//        }
-//
-//        for(int i = 0; i < createdPost.size(); i++) {
-//            log.info("조회순 게시글 조회: " + savedPost.get(i).getPostView());
-//        }
-//    }
-
-
-//    @Test
-//    @DisplayName("게시글 디테일 조회 서비스 테스트")
-//    public void getDetailPostTest() {
-//
-//        // 사용자 생성
-//        User user = new User();
-//        UUID userId = UUID.randomUUID();
-//        user.setUserId(userId);
-//        user.setEmail("test@test.com");
-//        user.setNickname("test");
-//        user.setProfileImage("test");
-//        userRepository.save(user);
-//
-//        List<User> createUser = userRepository.findAll();
-//        log.info("유저 ID: " + createUser.get(0).getUserId());
-//
-//        // 게시글 생성 시 데이터 주입
-//        CommCreatePostReqDto commCreatePostReqDto = CommCreatePostReqDto.builder()
-//                .userId(createUser.get(0).getUserId())
-//                .postTitle("테스트 제목")
-//                .postContent("테스트 내용")
-//                .build();
-//
-//        // 게시글 생성 메서드 호출
-//        Community createdPost = communityService.createPost(commCreatePostReqDto);
-//
-//        // 댓글 생성 시 데이터 주입
-//        CommCreateCommentReqDto commCreateCommentReqDto = CommCreateCommentReqDto.builder()
-//                .userId(createdPost.getUser().getUserId())
-//                .postId(createdPost.getPostId())
-//                .commentContents("테스트 내용")
-//                .build();
-//
-//        // 댓글 생성 메서드 호출
-//        communityService.createComment(commCreateCommentReqDto);
-//
-//        // 게시글 디테일 조회 메서드 호출
-//        Community community = communityRepository.findWithCommentsAndUserByPostId(createdPost.getPostId());
-//        log.info("getPostContent: " + community.getPostContent());
-//        log.info("getUser: " + community.getUser().getNickname());
-//        CommDetailPostResDto commDetailPostResDto = communityMapper.detailPostToDto(community);
-//        log.info("commDetailPostResDto: " + commDetailPostResDto);
-//        CommDetailPostResDto commDetailPostResDto = communityService.getDetailPost(createdPost.getPostId());
-
-//        log.info("게시글 제목: " + commDetailPostResDto.getPostTitle());
-//        log.info("게시글 작성자: " + commDetailPostResDto.getPostNickname());
-//        log.info("게시글 내용: " + commDetailPostResDto.getPostContent());
-//
-//        log.info("댓글 depth: " + commDetailPostResDto.getDepth());
-//        log.info("댓글 작성자: " + commDetailPostResDto.getCommentNickname());
-//        log.info("댓글 직성자 프로필 이미지: " + commDetailPostResDto.getProfileImage());
-//        log.info("댓글 내용: " + commDetailPostResDto.getCommentContents());
-
-//    }
-
-    // ToDo 댓글 조회 서비스 테스트
-
-
     @Test
     @DisplayName("댓글 작성 서비스 테스트")
     public void createCommentTest() {
@@ -367,5 +245,79 @@ public class CommunityServiceTest {
 
     }
 
-    // ToDo 새 댓글 수정, 삭제 서비스 테스트
+    // ToDo 댓글 수정, 삭제 서비스 테스트
+    @Test
+    @DisplayName("댓글 수정 서비스 테스트")
+    public void updateCommentTest() {
+        // 댓글 생성 시 데이터 주입
+        CommCreateCommentReqDto commCreateCommentReqDto = CommCreateCommentReqDto.builder()
+                .userId(UUID.fromString("ce4bb5a1-5ffe-4137-bdfc-c4959c184a7e"))
+                .postId(UUID.fromString("428627d5-b193-4407-999b-db35eb0a766d"))
+                .commentContents("댓글 테스트 내용")
+                .parentCommentId(null)
+                .build();
+
+        // 댓글 생성 메서드 호출
+        Comment createdComment = communityService.createComment(commCreateCommentReqDto);
+
+        // 생성된 댓글이 DB에 반영되었는지 조회
+        Optional<Comment> savedComment = commentRepository.findById(createdComment.getCommentId());
+        assertThat(savedComment).isPresent();
+        log.info("getCommentId: {}", savedComment.get().getCommentId());
+        log.info("getCommentContents: {}", savedComment.get().getCommentContents());
+        log.info("getCommentUpdateAt: {}", savedComment.get().getCommentUpdateAt());
+
+        // 수정할 댓글 데이터 주입
+        CommUpdateCommentReqDto commUpdateCommentReqDto = CommUpdateCommentReqDto.builder()
+                .commentId(savedComment.get().getCommentId())
+                .userId(savedComment.get().getUserId())
+                .commentContents("수정된 댓글 테스트 내용")
+                .build();
+
+        // 댓글 수정 메서드 호출
+        Comment updateComment = communityService.updateComment(commUpdateCommentReqDto);
+
+        // 수정된 댓글 내용이 DB에 반영되었는지 조회
+        Optional<Comment> result = commentRepository.findById(updateComment.getCommentId());
+        assertThat(result).isPresent();
+        log.info("getCommentId: {}", result.get().getCommentId());
+        log.info("getCommentContents: {}", result.get().getCommentContents());
+        log.info("getCommentUpdateAt: {}", result.get().getCommentUpdateAt());
+    }
+
+    @Test
+    @DisplayName("댓글 삭제 서비스 테스트")
+    public void deleteCommentTest() {
+        // 댓글 생성 시 데이터 주입
+        CommCreateCommentReqDto commCreateCommentReqDto = CommCreateCommentReqDto.builder()
+                .userId(UUID.fromString("ce4bb5a1-5ffe-4137-bdfc-c4959c184a7e"))
+                .postId(UUID.fromString("428627d5-b193-4407-999b-db35eb0a766d"))
+                .commentContents("댓글 테스트 내용")
+                .parentCommentId(null)
+                .build();
+
+        // 댓글 생성 메서드 호출
+        Comment createdComment = communityService.createComment(commCreateCommentReqDto);
+
+        // 생성된 댓글이 DB에 반영되었는지 조회
+        Optional<Comment> savedComment = commentRepository.findById(createdComment.getCommentId());
+        assertThat(savedComment).isPresent();
+        log.info("getCommentId: {}", savedComment.get().getCommentId());
+        log.info("getCommentDeleteAt: {}", savedComment.get().getCommentDeleteAt());
+        
+        // 삭제할 댓글 데이터 주입
+        CommDeleteCommentReqDto commDeleteCommentReqDto = CommDeleteCommentReqDto.builder()
+                .userId(savedComment.get().getUserId())
+                .commentId(savedComment.get().getCommentId())
+                .build();
+
+        // 댓글 삭제 메서드 호출
+        Comment deleteComment = communityService.deleteComment(commDeleteCommentReqDto);
+        
+        // 댓글이 삭제되었는지 검증
+        Optional<Comment> result = commentRepository.findById(deleteComment.getCommentId());
+        assertThat(result).isPresent();
+        log.info("getCommentId: {}", result.get().getCommentId());
+        log.info("getCommentDeleteAt: {}", result.get().getCommentDeleteAt());
+    }
 }

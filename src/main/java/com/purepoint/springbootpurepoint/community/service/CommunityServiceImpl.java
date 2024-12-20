@@ -2,10 +2,7 @@ package com.purepoint.springbootpurepoint.community.service;
 
 import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
-import com.purepoint.springbootpurepoint.community.dto.request.CommCreateCommentReqDto;
-import com.purepoint.springbootpurepoint.community.dto.request.CommCreatePostReqDto;
-import com.purepoint.springbootpurepoint.community.dto.request.CommDeletePostReqDto;
-import com.purepoint.springbootpurepoint.community.dto.request.CommUpdatePostReqDto;
+import com.purepoint.springbootpurepoint.community.dto.request.*;
 import com.purepoint.springbootpurepoint.community.dto.response.CommCommentResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
 import com.purepoint.springbootpurepoint.community.dto.response.CommReadPostResDto;
@@ -19,7 +16,6 @@ import com.purepoint.springbootpurepoint.community.repository.CommunityRepositor
 import com.purepoint.springbootpurepoint.user.domain.User;
 import com.purepoint.springbootpurepoint.user.exception.UserNotFoundException;
 import com.purepoint.springbootpurepoint.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -160,26 +155,22 @@ public class CommunityServiceImpl implements CommunityService {
         return commReadPostResDtos;
     }
 
-
     /**
      * 게시글 삭제
      *
      * @param commDeletePostReqDto 게시글 삭제 요청 DTO
+     * @return 삭제 처리된 게시글 엔티티
      */
     @Override
-    public void deletePost(CommDeletePostReqDto commDeletePostReqDto) {
-        Optional<Community> optionalCommunity = communityRepository.findById(commDeletePostReqDto.getPostId());
+    public Community deletePost(CommDeletePostReqDto commDeletePostReqDto) {
+        Community community = communityRepository.findById(commDeletePostReqDto.getPostId())
+                .orElseThrow(() -> new PostException("Post not found with id: " + commDeletePostReqDto.getPostId()));
 
         userRepository.findById(commDeletePostReqDto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + commDeletePostReqDto.getUserId()));
 
-        if (optionalCommunity.isPresent()) {
-            Community community = optionalCommunity.get();
-            community = communityMapper.deletePostToEntity(community);
-            communityRepository.save(community);
-        } else {
-            throw new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + commDeletePostReqDto.getPostId());
-        }
+        community = communityMapper.deletePostToEntity(community);
+        return communityRepository.save(community);
     }
 
     /**
@@ -191,15 +182,49 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Comment createComment(CommCreateCommentReqDto commCreateCommentReqDto) {
         communityRepository.findById(commCreateCommentReqDto.getPostId())
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new PostException("Post not found with id: " + commCreateCommentReqDto.getPostId()));
 
         userRepository.findById(commCreateCommentReqDto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + commCreateCommentReqDto.getUserId()));
 
-        Comment comment = commentMapper.createPostToEntity(commCreateCommentReqDto);
+        Comment comment = commentMapper.createCommentToEntity(commCreateCommentReqDto);
         return commentRepository.save(comment);
     }
 
-    // ToDo 댓글 수정 및 삭제 서비스 구현 필요
+    /**
+     * 댓글 수정
+     *
+     * @param commupdateCommentReqDto 댓글 수정 요청 DTO
+     * @return 수정된 댓글 엔티티
+     */
+    @Override
+    public Comment updateComment(CommUpdateCommentReqDto commupdateCommentReqDto) {
+        Comment comment = commentRepository.findById(commupdateCommentReqDto.getCommentId())
+                .orElseThrow(() -> new CommentException("Comment not found with id: " + commupdateCommentReqDto.getCommentId()));
+
+        userRepository.findById(commupdateCommentReqDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + commupdateCommentReqDto.getUserId()));
+
+        comment = commentMapper.updateCommentToEntity(comment, commupdateCommentReqDto);
+        return commentRepository.save(comment);
+    }
+
+    /**
+     * 댓글 삭제
+     *
+     * @param commDeleteCommentReqDto 댓글 삭제 요청 DTO
+     * @return 삭제 처리된 댓글 엔티티
+     */
+    @Override
+    public Comment deleteComment(CommDeleteCommentReqDto commDeleteCommentReqDto) {
+        Comment comment = commentRepository.findById(commDeleteCommentReqDto.getCommentId())
+                .orElseThrow(() -> new CommentException("Comment not found with id: " + commDeleteCommentReqDto.getCommentId()));
+
+        userRepository.findById(commDeleteCommentReqDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + commDeleteCommentReqDto.getUserId()));
+
+        comment = commentMapper.deleteCommentToEntity(comment);
+        return commentRepository.save(comment);
+    }
 
 }
