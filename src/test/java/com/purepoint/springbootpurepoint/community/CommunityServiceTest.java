@@ -4,18 +4,15 @@ import com.purepoint.springbootpurepoint.community.domain.Comment;
 import com.purepoint.springbootpurepoint.community.domain.Community;
 import com.purepoint.springbootpurepoint.community.dto.request.*;
 import com.purepoint.springbootpurepoint.community.dto.response.CommPagingResDto;
-import com.purepoint.springbootpurepoint.community.mapper.CommunityMapper;
 import com.purepoint.springbootpurepoint.community.repository.CommentRepository;
 import com.purepoint.springbootpurepoint.community.repository.CommunityRepository;
 import com.purepoint.springbootpurepoint.community.service.CommunityServiceImpl;
-import com.purepoint.springbootpurepoint.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.expression.spel.ast.OpOr;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -38,13 +35,6 @@ public class CommunityServiceTest {
 
     @Autowired
     private CommentRepository commentRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CommunityMapper communityMapper = CommunityMapper.INSTANCE;
-
 
     @Test
     @DisplayName("게시글 작성 서비스 테스트")
